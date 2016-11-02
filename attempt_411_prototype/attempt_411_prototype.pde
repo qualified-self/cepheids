@@ -1,3 +1,5 @@
+// This source code was contributed to by Sebastian Alvarez.
+// It is included here as a source of inspiration for the project.
 MyNode me;
 
 ArrayList<PeopleNode> people = new ArrayList<PeopleNode>();
