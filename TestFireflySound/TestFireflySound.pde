@@ -41,15 +41,11 @@ void draw() {
   env.step();
 
   // Compute total of all flash values.
-  float sum = 0;
-  int nAgents = env.getFireflies().size();
-  for (Firefly agent : env.getFireflies()) {
-    sum += agent.lastAction() / nAgents;
-  }
+  float average = env.getLastActionAverage();
 
-  // Update manager.
-  manager.update(sum);
+  // Update sound manager.
+  manager.update(average);
 
   // Set background lightness to the sum of all flashes.
-  background(round(sum * 255));
+  background(round(average * 255));
 }
