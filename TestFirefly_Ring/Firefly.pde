@@ -70,7 +70,7 @@ class Firefly {
   //first constructor - default values - calls second constructor
   Firefly(float flashThreshold)
   {
-    this(flashThreshold, 0.3f, 0.01, 0.01, 1);
+    this(flashThreshold, 0.3f, 0.01, 0.01, 0.5);
   }
 
   //Second constructor
