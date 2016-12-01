@@ -16,13 +16,15 @@ class Environment {
 
   private int state;
 
-  ArrayList<Firefly> scheduledAddFireflies;
+  // This is used to maintain a copy of next fireflies array
+  // in order to allow for concurrent add/remove of fireflies.
+  ArrayList<Firefly> nextFireflies;
 
   Environment(int setNumberOfParticles) {
     fireflies = new ArrayList<Firefly>();
     firefliesDefaultPeriod = PERIOD;
 
-    scheduledAddFireflies = new ArrayList<Firefly>();
+    nextFireflies = new ArrayList<Firefly>();
 
     this.numberOfParticles = setNumberOfParticles;
 
@@ -39,6 +41,8 @@ class Environment {
   }
 
   void init() {
+    fireflies = new ArrayList<Firefly>(nextFireflies);
+
     for (Firefly f : fireflies)
       f.init();
     started = false;
@@ -46,17 +50,14 @@ class Environment {
   }
 
   void start() {
+    fireflies = new ArrayList<Firefly>(nextFireflies);
     for (Firefly f : fireflies)
       f.start(this);
     started = true;
   }
 
   void step() {
-    if (!scheduledAddFireflies.isEmpty()) {
-      for (int i=0; i<scheduledAddFireflies.size(); i++)
-        addFirefly(scheduledAddFireflies.get(i));
-      scheduledAddFireflies.clear();
-    }
+    fireflies = new ArrayList<Firefly>(nextFireflies);
 
     for (Firefly f : fireflies)
       f.step(this);
@@ -135,7 +136,7 @@ class Environment {
   // Adjust period of all fireflies.
   void setPeriod(float period) {
     firefliesDefaultPeriod = period;
-    for (Firefly f : fireflies)
+    for (Firefly f : nextFireflies)
       f.setPeriod(firefliesDefaultPeriod);
   }
 
@@ -157,35 +158,36 @@ class Environment {
 
   // Add firefly.
   Firefly addFirefly(Firefly f) {
-    fireflies.add(f);
+    nextFireflies.add(f);
     f.init();
     if (started)
       f.start(this);
     return f;
   }
 
-  // Schedule adding of firefly on next call to step().
-  void scheduleAddFirefly() {
-    scheduleAddFirefly(firefliesDefaultPeriod);
-  }
-  void scheduleAddFirefly(float period) {
-    scheduleAddFirefly(new Firefly(period));
-  }
-  void scheduleAddFirefly(Firefly f) {
-    scheduledAddFireflies.add(f);
-  }
+  // // Schedule adding of firefly on next call to step().
+  // void scheduleAddFirefly() {
+  //   scheduleAddFirefly(firefliesDefaultPeriod);
+  // }
+  // void scheduleAddFirefly(float period) {
+  //   scheduleAddFirefly(new Firefly(period));
+  // }
+  // void scheduleAddFirefly(Firefly f) {
+  //   scheduledAddFireflies.add(f);
+  // }
 
   // Remove random firefly.
   Firefly removeFirefly() {
-    if (hasFireflies())
-      return removeFirefly(getFirefly((int)random(nFireflies())));
+    if (!nextFireflies.isEmpty())
+      return removeFirefly(
+               nextFireflies.get((int)random(nextFireflies.size())));
     else
       return null;
   }
 
   // Remove firefly.
   Firefly removeFirefly(Firefly f) {
-    return (fireflies.remove(f) ? f : null);
+    return (nextFireflies.remove(f) ? f : null);
   }
 
   /// Returns the average of all last actions of agents (after a call to step()).

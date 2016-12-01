@@ -29,7 +29,7 @@ class OscManager {
 
     // Environment actions.
     oscP5.plug(env, "setPeriod", "/environment/period");
-    oscP5.plug(env, "scheduleAddFirefly", "/environment/firefly/add");
+    oscP5.plug(env, "addFirefly", "/environment/firefly/add");
   }
 
 }
