@@ -28,8 +28,10 @@ class OscManager {
     oscP5.plug(soundManager, "setMasterGain", "/audio/master/gain");
 
     // Environment actions.
-    oscP5.plug(env, "setPeriod", "/environment/period");
-    oscP5.plug(env, "addFirefly", "/environment/firefly/add");
+    oscP5.plug(env, "setPeriod",     "/environment/period", "f");
+    oscP5.plug(env, "addFirefly",    "/environment/firefly/add", "");
+    oscP5.plug(env, "addFirefly",    "/environment/firefly/add", "f");
+    oscP5.plug(env, "removeFirefly", "/environment/firefly/remove", "");
   }
 
 }
