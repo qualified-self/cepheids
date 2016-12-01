@@ -89,6 +89,8 @@ class Firefly {
     stateTimer = new Chrono(false);
 
     fireParticle = new Particle();
+
+    state = FireflyState.IDLE;
   }
 
   void pulseAway() {
