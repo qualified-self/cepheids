@@ -1,10 +1,11 @@
 import beads.*;
 
 // Number of firefly agents.
-final int N_AGENTS = 1000;
+final int N_AGENTS = 100;
 
 // Oscillation period (in seconds).
-final float PERIOD = 5.0f;
+final float INIT_BPM    = 80.0f; // normal BPM at rest is 60-100 BPM
+final float PERIOD      = 60.0 / INIT_BPM;
 
 // N. audio tracks for the beat generator.
 final int N_TRACKS  = 50;
@@ -20,17 +21,14 @@ OscManager oscManager;
 SoundManager soundManager;
 
 void setup() {
-  size(500, 500);
+  size(1280, 720);
 
   // Create environment with all fireflies.
-  env = new Environment();
+  env = new Environment(N_AGENTS);
   for (int i=0; i<N_AGENTS; i++) {
     env.getFireflies().add(new Firefly(PERIOD));
   }
 
-  // Init environment.
-  env.init();
-  env.start();
 
   // Initialize audio.
   soundManager = new SoundManager();
@@ -39,9 +37,15 @@ void setup() {
   // Create OSC manager.
   oscManager = new OscManager(this);
   oscManager.build();
+
+  // Init environment.
+  env.init();
+  env.start();
 }
 
 void draw() {
+  background(0);
+
   // Step environment.
   env.step();
 
@@ -50,9 +54,9 @@ void draw() {
 
   // Update sound manager.
   soundManager.update(average);
-
-  // Set background lightness to the sum of all flashes.
-  background(round(average * 255));
+  //
+  // // Set background lightness to the sum of all flashes.
+  // background(round(average * 255));
 }
 
 

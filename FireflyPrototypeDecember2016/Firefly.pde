@@ -65,9 +65,12 @@ class Firefly {
 
   float action;
 
+  // Particle for the firing.
+  Particle fireParticle;
+
   Firefly(float flashPeriod)
   {
-    this(flashPeriod, 0.3f, 0.01, 0.01, 0.01);
+    this(flashPeriod, 0.1f, 0.01, 0.01, 0.01);
   }
 
   Firefly(float flashPeriod,
@@ -84,6 +87,20 @@ class Firefly {
 
     mainTimer  = new Chrono(false);
     stateTimer = new Chrono(false);
+
+    fireParticle = new Particle();
+  }
+
+  void pulseAway() {
+    fireParticle.particleResponse(action);
+  }
+
+  Particle getFireParticle() {
+    return fireParticle;
+  }
+
+  void displayParticle(Environment env) {
+    fireParticle.run(this, env);
   }
 
   void init() {
@@ -101,7 +118,7 @@ class Firefly {
   }
 
   void setPhase(float phase) {
-    mainTimer.restart((long)(phase*flashPeriod*1000));
+    mainTimer.restart(round(phase * flashPeriod * 1000));
   }
 
   /// Returns incoming "light" for this agent. For now it will be 0 if no agents have flashed and 1 otherwise.
@@ -121,7 +138,8 @@ class Firefly {
   /// Start the firefly.
   float start(Environment env) {
     // Offset the period so as to desynchronize the agents.
-    mainTimer.restart((long)random(0, flashPeriod*1000));
+    setPhase(random(1));
+    println(mainTimer.elapsed());
 
     // Init
     _changeState(FireflyState.IDLE, 0);
