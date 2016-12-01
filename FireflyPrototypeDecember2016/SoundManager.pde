@@ -5,11 +5,13 @@ import java.util.*;
  */
 class SoundManager {
 
+  final String AUDIO_FILE_NAME = "heartbeat.wav";
+
   class Clip {
     SamplePlayer player;
     Gain gain;
 
-    Clip(String fileName) {
+    Clip( String fileName) {
       player = new SamplePlayer(ac, SampleManager.sample(dataPath("") + "/" + fileName));
       gain = new Gain(ac, 2, 1);
       gain.addInput(player);
@@ -54,6 +56,12 @@ class SoundManager {
 
   void addClip(String label, String fileName) {
     clips.put(label, new Clip(fileName));
+  }
+
+  Map<String, Clip> getClips() { return clips; }
+  
+  Clip getClip(String label) {
+    return clips.get(label);
   }
 
   void setClipGain(String label, float gain) {

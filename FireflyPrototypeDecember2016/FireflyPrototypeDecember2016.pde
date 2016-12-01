@@ -6,12 +6,17 @@ final int N_AGENTS = 1000;
 // Oscillation period (in seconds).
 final float PERIOD = 5.0f;
 
+// N. audio tracks for the beat generator.
+final int N_TRACKS  = 50;
+
+final int OSC_SEND_PORT = 12000;
+final int OSC_RECV_PORT = 14000;
+final String OSC_IP     = "127.0.0.1";
+//final String OSC_IP     = "192.168.1.100";
+
 Environment env;
 
-
-final String AUDIO_FILE_NAME = "heartbeat.wav";
-final int   N_TRACKS  = 50;
-
+OscManager oscManager;
 SoundManager soundManager;
 
 void setup() {
@@ -30,6 +35,10 @@ void setup() {
   // Initialize audio.
   soundManager = new SoundManager();
   soundManager.start();
+
+  // Create OSC manager.
+  oscManager = new OscManager(this);
+  oscManager.build();
 }
 
 void draw() {
@@ -44,4 +53,12 @@ void draw() {
 
   // Set background lightness to the sum of all flashes.
   background(round(average * 255));
+}
+
+
+void oscEvent(OscMessage msg) {
+  /* print the address pattern and the typetag of the received OscMessage */
+  print("### received an osc message.");
+  print(" addrpattern: "+msg.addrPattern());
+  println(" typetag: "+msg.typetag());
 }
