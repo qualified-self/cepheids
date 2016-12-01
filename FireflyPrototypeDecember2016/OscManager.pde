@@ -25,7 +25,11 @@ class OscManager {
       oscP5.plug(entry.getValue(), "setGain", "/audio/clip/" + entry.getKey() + "/gain");
 
     // Master gain.
-    oscP5.plug(soundManager, "setMasterGain", "/audio/master/gain");    
+    oscP5.plug(soundManager, "setMasterGain", "/audio/master/gain");
+
+    // Environment actions.
+    oscP5.plug(env, "setPeriod", "/environment/period");
+    oscP5.plug(env, "scheduleAddFirefly", "/environment/firefly/add");
   }
 
 }

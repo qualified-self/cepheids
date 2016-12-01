@@ -16,9 +16,13 @@ class Environment {
 
   private int state;
 
+  ArrayList<Firefly> scheduledAddFireflies;
+
   Environment(int setNumberOfParticles) {
     fireflies = new ArrayList<Firefly>();
     firefliesDefaultPeriod = PERIOD;
+
+    scheduledAddFireflies = new ArrayList<Firefly>();
 
     this.numberOfParticles = setNumberOfParticles;
 
@@ -48,6 +52,12 @@ class Environment {
   }
 
   void step() {
+    if (!scheduledAddFireflies.isEmpty()) {
+      for (int i=0; i<scheduledAddFireflies.size(); i++)
+        addFirefly(scheduledAddFireflies.get(i));
+      scheduledAddFireflies.clear();
+    }
+
     for (Firefly f : fireflies)
       f.step(this);
 
@@ -152,6 +162,17 @@ class Environment {
     if (started)
       f.start(this);
     return f;
+  }
+
+  // Schedule adding of firefly on next call to step().
+  void scheduleAddFirefly() {
+    scheduleAddFirefly(firefliesDefaultPeriod);
+  }
+  void scheduleAddFirefly(float period) {
+    scheduleAddFirefly(new Firefly(period));
+  }
+  void scheduleAddFirefly(Firefly f) {
+    scheduledAddFireflies.add(f);
   }
 
   // Remove random firefly.
