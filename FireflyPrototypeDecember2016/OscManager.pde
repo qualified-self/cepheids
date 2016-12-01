@@ -17,9 +17,15 @@ class OscManager {
 
   /// Plugs all messages to appropriate methods.
   void build() {
+    // Beat gain.
     oscP5.plug(soundManager, "setBeatGain", "/audio/beat/gain");
+
+    // Clips gains.
     for (Map.Entry<String, SoundManager.Clip> entry : soundManager.getClips().entrySet())
       oscP5.plug(entry.getValue(), "setGain", "/audio/clip/" + entry.getKey() + "/gain");
+
+    // Master gain.
+    oscP5.plug(soundManager, "setMasterGain", "/audio/master/gain");    
   }
 
 }
