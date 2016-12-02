@@ -23,6 +23,7 @@ ECG_BITALINO_PORT=2
 ECG_THRESHOLD = 0.5
 
 first_time = True
+last_beat_timestamp = 0
 
 samplingRate = 10
 #samplingRate = 100
@@ -93,6 +94,8 @@ def loop(serial, host, port):
 
     try:
         print "Entering reading loop..."
+        last_beat_timestamp = int(round(time.time() * 1000))
+
         while True:
             samples = bitadev.read(1)
             #instead of sleeping a fixed time
@@ -111,20 +114,31 @@ def loop(serial, host, port):
                 subarray = normalize(subarray)
                 #print (subarray)
 
-
+                #sending first message: raw info
                 heart_raw = subarray[ECG_BITALINO_PORT]
-                msg_raw = OSCMessage()
-                msg_raw.setAddress("/ecg/raw")
-                msg_raw.append(heart_raw)
-                osctx.send(msg_raw)
+                msg = OSCMessage()
+                msg.setAddress("/ecg/raw")
+                msg.append(heart_raw)
+                osctx.send(msg)
 
                 if heart_raw > ECG_THRESHOLD and first_time:
+                    #sending second message: bang
                     first_time = False
-                    msg_bang = OSCMessage()
-                    msg_bang.setAddress("/ecg/bang")
-                    msg_bang.append(1)
-                    osctx.send(msg_bang)
-                    print "bang!"
+                    msg = OSCMessage()
+                    msg.setAddress("/ecg/bang")
+                    msg.append(1)
+                    osctx.send(msg)
+
+                    #sending third message: gap between two beats
+                    actual_timestamp = int(round(time.time() * 1000))
+                    gap = actual_timestamp - last_beat_timestamp
+                    msg = OSCMessage()
+                    msg.setAddress("/ecg/gap")
+                    msg.append(gap)
+                    osctx.send(msg)
+
+                    last_beat_timestamp = actual_timestamp
+
 
                 if heart_raw < ECG_THRESHOLD:
                     first_time = True
