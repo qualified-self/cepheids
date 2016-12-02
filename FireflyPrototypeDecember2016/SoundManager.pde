@@ -57,8 +57,8 @@ class SoundManager {
     clips = new HashMap<String, Clip>();
 
     // Add clips.
-    addClip("prologue",   "environment_1.mp3");
-    addClip("soundscape", "environment_1.mp3");
+    addClip("prologue",   "environment_prologue.mp3");
+    addClip("soundscape", "environment_intro.mp3");
 
     ac.out.addInput(masterGain);
   }
