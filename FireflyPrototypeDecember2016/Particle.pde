@@ -14,6 +14,7 @@ class Particle {
   float leAngle;
   float headSize;
 
+  //Initial size of the first part of the tail. 
   final float SIZE_SEG = 1.2;
 
   //Setting location within ring
@@ -41,19 +42,11 @@ class Particle {
   //Checks if angents have arrived to the ring
   private boolean arrived = false;
 
-  //Allows for trace to happen only when firefly flashes (optimization trick)
-  private boolean startLeavingTrace = false;
-
-  private int traceTimer;
-  private int traceCurrentTimer;
-
-  private float wingFlapScale;
-  private float wingFlapSpeed;
-  private float wingFlapPulse;
-
   private boolean pulseFromPlace;
   private int pulseTimer;
   private int pulseCurrentTimer;
+  
+  private int flashFadeSpeed;
 
 
   Particle() {
@@ -72,7 +65,6 @@ class Particle {
     distanceWander = 80;
     smallChange = 0.008;
 
-    wandertheta = 0;
     wanderSpeed = random(0.4, 1);
     maxspeed = 0.9;
     limit = 1.2;
@@ -82,17 +74,13 @@ class Particle {
 
     anglePos = 0;
 
-    traceTimer = millis();
-
-    wingFlapScale = 90;
-    wingFlapSpeed = random(0.2, 0.4);
-    wingFlapPulse = random(0, 1);
-
     pulseFromPlace = false;
 
     offset = SIZE_SEG;
     headSize = SIZE_SEG*4;
     leAngle = 0;
+    
+    flashFadeSpeed = 3;
 
     for (int i =0; i < positions.length; i++) {
       positions[i] = new PVector(location.x, location.y);
@@ -168,7 +156,7 @@ class Particle {
       fillColor = 255;
     else
       if (fillColor > 0)
-        fillColor -= 3;
+        fillColor -= flashFadeSpeed;
       else
         fillColor = 0;
   }
@@ -193,7 +181,6 @@ class Particle {
     // Reset accelertion to 0 each cycle
     acceleration.mult(0);
 
-    wingFlapPulse += wingFlapSpeed;
   }
 
   void applyForce(PVector force) {
