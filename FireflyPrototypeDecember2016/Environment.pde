@@ -153,7 +153,7 @@ class Environment {
     }
   }
 
-  // Adjust period of all fireflies.
+  /// Adjusts period of all fireflies.
   void setPeriod(float period) {
     firefliesDefaultPeriod = period;
     for (Firefly f : nextFireflies)
@@ -174,7 +174,6 @@ class Environment {
       f.dePhase();
   }
 
-  /// Register heart beat.
   /// Sets adjustment factor for all fireflies.
   void setFlashAdjust(float flashAdjust) {
     this.flashAdjust = flashAdjust;
@@ -189,6 +188,7 @@ class Environment {
       f.setHeartBeatAdjustFactor(heartBeatAdjustFactor);
   }
 
+  /// Registers heart beat.
   void registerBeat() {
     heart.beat();
   }
@@ -217,16 +217,17 @@ class Environment {
     return randomFireflies;
   }
 
+  /// Adds firefly with default period.
   Firefly addFirefly() {
     return addFirefly(firefliesDefaultPeriod);
   }
 
-  // Add firefly with specific period.
+  /// Adds firefly with specific period.
   Firefly addFirefly(float period) {
-    return addFirefly(new Firefly(period));
+    return addFirefly(new Firefly(period, flashAdjust, heartBeatAdjustFactor));
   }
 
-  // Add firefly.
+  /// Adds firefly.
   Firefly addFirefly(Firefly f) {
     nextFireflies.add(f);
     f.init();
@@ -235,18 +236,7 @@ class Environment {
     return f;
   }
 
-  // // Schedule adding of firefly on next call to step().
-  // void scheduleAddFirefly() {
-  //   scheduleAddFirefly(firefliesDefaultPeriod);
-  // }
-  // void scheduleAddFirefly(float period) {
-  //   scheduleAddFirefly(new Firefly(period));
-  // }
-  // void scheduleAddFirefly(Firefly f) {
-  //   scheduledAddFireflies.add(f);
-  // }
-
-  // Remove random firefly.
+  /// Removes random firefly.
   Firefly removeFirefly() {
     if (!nextFireflies.isEmpty())
       return removeFirefly(
@@ -255,7 +245,7 @@ class Environment {
       return null;
   }
 
-  // Remove firefly.
+  /// Removes firefly.
   Firefly removeFirefly(Firefly f) {
     return (nextFireflies.remove(f) ? f : null);
   }
