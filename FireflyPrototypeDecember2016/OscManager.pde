@@ -28,10 +28,14 @@ class OscManager {
     oscP5.plug(soundManager, "setMasterGain", "/audio/master/gain");
 
     // Environment actions.
-    oscP5.plug(env, "setPeriod",     "/environment/period", "f");
+    oscP5.plug(env, "setPeriod",                "/environment/firefly/period", "f");
+    oscP5.plug(env, "setFlashAdjust",           "/environment/firefly/flash-adjust", "f");
+    oscP5.plug(env, "setHeartBeatAdjustFactor", "/environment/firefly/heart-beat-adjust-factor", "f");
+
     oscP5.plug(env, "addFirefly",    "/environment/firefly/add", "");
     oscP5.plug(env, "addFirefly",    "/environment/firefly/add", "f");
     oscP5.plug(env, "removeFirefly", "/environment/firefly/remove", "");
+
     oscP5.plug(env, "registerBeat",  "/environment/heart/beat", "");
   }
 

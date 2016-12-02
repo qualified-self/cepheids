@@ -7,6 +7,12 @@ class Environment {
   ArrayList<Firefly> fireflies;
   float firefliesDefaultPeriod;
 
+  /// Adjustment to power when a neighbor flashes as a proportion of flashPeriod (should be in [0,1]).
+  float flashAdjust;
+
+  // Adjustment multiplier for heartbeat.
+  float heartBeatAdjustFactor;
+
   Heart heart;
 
   boolean started;
@@ -22,9 +28,13 @@ class Environment {
   // in order to allow for concurrent add/remove of fireflies.
   ArrayList<Firefly> nextFireflies;
 
+
   Environment(int setNumberOfParticles) {
     fireflies = new ArrayList<Firefly>();
+
     firefliesDefaultPeriod = PERIOD;
+    flashAdjust = FLASH_ADJUST;
+    heartBeatAdjustFactor = HEART_BEAT_ADUST_FACTOR;
 
     nextFireflies = new ArrayList<Firefly>();
 
@@ -151,6 +161,20 @@ class Environment {
   }
 
   /// Register heart beat.
+  /// Sets adjustment factor for all fireflies.
+  void setFlashAdjust(float flashAdjust) {
+    this.flashAdjust = flashAdjust;
+    for (Firefly f : nextFireflies)
+      f.setFlashAdjust(flashAdjust);
+  }
+
+  /// Sets heartbeat adjustment factor for all fireflies.
+  void setHeartBeatAdjustFactor(float heartBeatAdjustFactor) {
+    this.heartBeatAdjustFactor = heartBeatAdjustFactor;
+    for (Firefly f : nextFireflies)
+      f.setHeartBeatAdjustFactor(heartBeatAdjustFactor);
+  }
+
   void registerBeat() {
     heart.beat();
   }
@@ -165,7 +189,20 @@ class Environment {
 
   ArrayList<Firefly> getFireflies() { return fireflies; }
 
-  // Add firefly with default period.
+  ArrayList<Firefly> getRandomFireflies(ArrayList<Firefly> orig, int n) {
+    // Generate shuffled list of all indices.
+    ArrayList<Integer> range = new ArrayList<Integer>();
+    for(int i = 0; i < orig.size(); i++)
+      range.add(i);
+    Collections.shuffle(range);
+
+    // Pick subsample.
+    ArrayList<Firefly> randomFireflies = new ArrayList<Firefly>();
+    for (int i=0; i<n; i++)
+      randomFireflies.add(orig.get(range.get(i)));
+    return randomFireflies;
+  }
+
   Firefly addFirefly() {
     return addFirefly(firefliesDefaultPeriod);
   }

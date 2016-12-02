@@ -1,4 +1,4 @@
-d /*
+/**
  * Firefly
  *
  * (c) 2012 Sofian Audry -- info(@)sofianaudry(.)com
@@ -48,7 +48,7 @@ class Firefly {
   /// Adjustment to power when a neighbor flashes as a proportion of flashPeriod (should be in [0,1]).
   float flashAdjust;
 
-  // Adjustment multiplier for heartbeat.
+  /// Adjustment multiplier for heartbeat.
   float heartBeatAdjustFactor;
 
   // Internal use.
@@ -73,12 +73,12 @@ class Firefly {
 
   Firefly(float flashPeriod)
   {
-    this(flashPeriod, 0.1f, 0.01, 0.01, 0.01, 2.0);
+    this(flashPeriod, FLASH_ADJUST, 0.01, 0.01, 0.01, HEART_BEAT_ADUST_FACTOR);
   }
 
-  Firefly(float flashPeriod, float heartBeatAdjustFactor)
+  Firefly(float flashPeriod, float flashAdjust, float heartBeatAdjustFactor)
   {
-    this(flashPeriod, 0.1f, 0.01, 0.01, 0.01, heartBeatAdjustFactor);
+    this(flashPeriod, flashAdjust, 0.01, 0.01, 0.01, heartBeatAdjustFactor);
   }
 
   Firefly(float flashPeriod,
