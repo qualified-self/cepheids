@@ -22,6 +22,8 @@ class Particle {
 
   //Flashing color
   private float fillColor;
+  private float intensity; // multiplier for the color in [0, 1] to allow for fadings
+  private float adjustedFillColor; // = fillColor * intensity
 
   //Wandering fornce
   private float wandertheta;
@@ -65,6 +67,7 @@ class Particle {
     positions = new PVector[10];
 
     fillColor = 0;
+    intensity = 1.0;
 
     boidSize = 10.0;
 
@@ -99,18 +102,22 @@ class Particle {
     }
   }
 
+  void setIntensity(float intensity) {
+    this.intensity = intensity;
+  }
+
   void display() {
 
     offset = SIZE_SEG;
 
     angleHead = velocity.heading2D()+ PI/2;
 
-    stroke(255, fillColor);
+    stroke(255, adjustedFillColor);
     strokeWeight(0.5);
     pushMatrix();
     translate(positions[0].x, positions[0].y);
     rotate(angleHead);
-    fill(fillColor);
+    fill(adjustedFillColor);
     arc(0, headSize, headSize*2, headSize*2.5, PI, 2*PI);
     popMatrix();
 
@@ -134,12 +141,12 @@ class Particle {
   }
 
   void segment(float x, float y, float angler) {
-    stroke(255, fillColor);
+    stroke(255, adjustedFillColor);
     strokeWeight(0.5);
     pushMatrix();
     translate(x, y);
     rotate(angler+PI/2);
-    fill(fillColor);
+    fill(adjustedFillColor);
     beginShape();
     vertex(0-offset, 0);
     vertex(0+offset, 0);
@@ -148,7 +155,7 @@ class Particle {
     vertex(0-offset, 0+offset);
     endShape(CLOSE);
     noStroke();
-    fill(255, fillColor);
+    fill(255, adjustedFillColor);
     ellipse(0, offset, offset/3, offset/3);
     popMatrix();
   }
@@ -208,11 +215,12 @@ class Particle {
 
     if (f.getAction()> 0)
       fillColor = 255;
+    else if (fillColor > 0)
+      fillColor -= 3;
     else
-      if (fillColor > 0)
-        fillColor -= 3;
-      else
-        fillColor = 0;
+      fillColor = 0;
+
+    adjustedFillColor = intensity * fillColor;
   }
 
   void update(Environment env) {

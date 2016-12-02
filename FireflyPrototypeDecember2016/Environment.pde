@@ -13,6 +13,8 @@ class Environment {
   // Adjustment multiplier for heartbeat.
   float heartBeatAdjustFactor;
 
+  float firefliesColorIntensity;
+
   Heart heart;
 
   boolean started;
@@ -35,6 +37,7 @@ class Environment {
     firefliesDefaultPeriod = PERIOD;
     flashAdjust = FLASH_ADJUST;
     heartBeatAdjustFactor = HEART_BEAT_ADUST_FACTOR;
+    firefliesColorIntensity = 0;
 
     nextFireflies = new ArrayList<Firefly>();
 
@@ -186,6 +189,12 @@ class Environment {
     this.heartBeatAdjustFactor = heartBeatAdjustFactor;
     for (Firefly f : nextFireflies)
       f.setHeartBeatAdjustFactor(heartBeatAdjustFactor);
+  }
+
+  void setIntensity(float intensity) {
+    this.firefliesColorIntensity = intensity;
+    for (Firefly f : nextFireflies)
+      f.getFireParticle().setIntensity(firefliesColorIntensity);
   }
 
   /// Registers heart beat.
