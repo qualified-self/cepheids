@@ -45,7 +45,7 @@ class Particle {
   private boolean pulseFromPlace;
   private int pulseTimer;
   private int pulseCurrentTimer;
-  
+
   private int flashFadeSpeed;
 
 
@@ -80,7 +80,7 @@ class Particle {
     offset = SIZE_SEG;
     headSize = SIZE_SEG*4;
     leAngle = 0;
-    
+
     flashFadeSpeed = 3;
 
     for (int i =0; i < positions.length; i++) {
@@ -161,14 +161,14 @@ class Particle {
       else
         fillColor = 0;
   }
-  
-  
+
+
   //-----------Setter and Getter for flashing speed-------------//
-  public int getFlashFadeSpeed(){
-   return flashFadeSpeed; 
+  public int getFlashFadeSpeed() {
+    return flashFadeSpeed;
   }
-  
-  public void setflashFadeSpeed(int newFadeSpeed){
+
+  public void setflashFadeSpeed(int newFadeSpeed) {
     flashFadeSpeed = newFadeSpeed;
   }
 
@@ -183,7 +183,7 @@ class Particle {
     if (env.getState() == 0)
       limit = 1;
     else
-    limit = 1.2;
+      limit = 1.2;
 
     velocity.limit(limit);
 
@@ -191,7 +191,6 @@ class Particle {
 
     // Reset accelertion to 0 each cycle
     acceleration.mult(0);
-
   }
 
   void applyForce(PVector force) {
@@ -290,5 +289,6 @@ class Particle {
 
     if (action > 0 && arrived) {
       applyForce(awayFromCenter);
+    }
   }
 }
