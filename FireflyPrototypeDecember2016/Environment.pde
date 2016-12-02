@@ -7,6 +7,8 @@ class Environment {
   ArrayList<Firefly> fireflies;
   float firefliesDefaultPeriod;
 
+  Heart heart;
+
   boolean started;
 
   int[] rings = new int[30];
@@ -28,6 +30,8 @@ class Environment {
 
     this.numberOfParticles = setNumberOfParticles;
 
+    heart = new Heart();
+
     for (int i = 0; i < rings.length; i++)
       rings[i] = (70*i);
 
@@ -46,6 +50,8 @@ class Environment {
     for (Firefly f : fireflies)
       f.init();
     started = false;
+
+    heart.reset();
     initialize();
   }
 
@@ -54,6 +60,8 @@ class Environment {
     for (Firefly f : fireflies)
       f.start(this);
     started = true;
+
+    heart.reset();
   }
 
   void step() {
@@ -84,6 +92,8 @@ class Environment {
         f.pulseAway();
       }
     }
+
+    heart.reset();
   }
 
   void drawParticle() {
@@ -138,6 +148,15 @@ class Environment {
     firefliesDefaultPeriod = period;
     for (Firefly f : nextFireflies)
       f.setPeriod(firefliesDefaultPeriod);
+  }
+
+  /// Register heart beat.
+  void registerBeat() {
+    heart.beat();
+  }
+
+  float getBeat() {
+    return heart.getAction();
   }
 
   int nFireflies() { return fireflies.size(); }

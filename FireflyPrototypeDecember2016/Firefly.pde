@@ -48,6 +48,9 @@ class Firefly {
   /// Adjustment to power when a neighbor flashes as a proportion of flashPeriod (should be in [0,1]).
   float flashAdjust;
 
+  // Adjustment multiplier for heartbeat.
+  float heartBeatAdjustFactor;
+
   // Internal use.
 
   // Current state.
@@ -70,20 +73,27 @@ class Firefly {
 
   Firefly(float flashPeriod)
   {
-    this(flashPeriod, 0.1f, 0.01, 0.01, 0.01);
+    this(flashPeriod, 0.1f, 0.01, 0.01, 0.01, 2.0);
+  }
+
+  Firefly(float flashPeriod, float heartBeatAdjustFactor)
+  {
+    this(flashPeriod, 0.1f, 0.01, 0.01, 0.01, heartBeatAdjustFactor);
   }
 
   Firefly(float flashPeriod,
           float flashAdjust,
           float refractoryTime,
           float blindTime,
-          float flashTime)
+          float flashTime,
+          float heartBeatAdjustFactor)
   {
     this.flashPeriod    = flashPeriod;
     this.flashAdjust    = flashAdjust;
     this.refractoryTime = refractoryTime;
     this.blindTime      = blindTime;
     this.flashTime      = flashTime;
+    this.heartBeatAdjustFactor = heartBeatAdjustFactor;
 
     mainTimer  = new Chrono(false);
     stateTimer = new Chrono(false);
@@ -171,8 +181,9 @@ class Firefly {
     switch (state) {
     case IDLE: {
         // Check for incoming flashes.
-        if (incoming > mean) {
-          mainTimer.add(round(flashPeriod * flashAdjust * 1000));
+        if (incoming > mean || env.getBeat() > 0) {
+          float adjust = flashAdjust * (env.getBeat() > 0 ? heartBeatAdjustFactor : 1);
+          mainTimer.add(round(flashPeriod * adjust * 1000));
           state = FireflyState.BLIND;
           stateTime = round(blindTime * 1000);
           stateTimer.restart();

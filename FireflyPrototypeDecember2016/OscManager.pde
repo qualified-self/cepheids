@@ -32,6 +32,7 @@ class OscManager {
     oscP5.plug(env, "addFirefly",    "/environment/firefly/add", "");
     oscP5.plug(env, "addFirefly",    "/environment/firefly/add", "f");
     oscP5.plug(env, "removeFirefly", "/environment/firefly/remove", "");
+    oscP5.plug(env, "registerBeat",  "/environment/heart/beat", "");
   }
 
 }
