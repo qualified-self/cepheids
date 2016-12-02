@@ -161,6 +161,16 @@ class Particle {
       else
         fillColor = 0;
   }
+  
+  
+  //-----------Setter and Getter for flashing speed-------------//
+  public int getFlashFadeSpeed(){
+   return flashFadeSpeed; 
+  }
+  
+  public void setflashFadeSpeed(int newFadeSpeed){
+    flashFadeSpeed = newFadeSpeed;
+  }
 
   void update(Environment env) {
 
