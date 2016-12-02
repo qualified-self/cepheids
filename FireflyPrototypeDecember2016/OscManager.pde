@@ -15,14 +15,27 @@ class OscManager {
     remoteLocation = new NetAddress(OSC_IP, OSC_SEND_PORT);
   }
 
+  void reset() {
+    // env.init();
+    // env.start();
+    soundManager.reset();
+  }
+
   /// Plugs all messages to appropriate methods.
   void build() {
+    // Reset.
+    oscP5.plug(this, "reset", "/reset");
+
     // Beat gain.
     oscP5.plug(soundManager, "setBeatGain", "/audio/beat/gain");
 
     // Clips gains.
-    for (Map.Entry<String, SoundManager.Clip> entry : soundManager.getClips().entrySet())
+    for (Map.Entry<String, SoundManager.Clip> entry : soundManager.getClips().entrySet()) {
       oscP5.plug(entry.getValue(), "setGain", "/audio/clip/" + entry.getKey() + "/gain");
+      oscP5.plug(entry.getValue(), "play",    "/audio/clip/" + entry.getKey() + "/play");
+      oscP5.plug(entry.getValue(), "pause",   "/audio/clip/" + entry.getKey() + "/pause");
+      oscP5.plug(entry.getValue(), "reset",   "/audio/clip/" + entry.getKey() + "/reset");
+    }
 
     // Master gain.
     oscP5.plug(soundManager, "setMasterGain", "/audio/master/gain");

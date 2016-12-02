@@ -18,6 +18,18 @@ class SoundManager {
       masterGain.addInput(gain);
     }
 
+    void play() {
+      player.start();
+    }
+
+    void pause() {
+      player.pause(true);
+    }
+
+    void reset() {
+      player.reset();
+    }
+
     void setGain(float g) {
       gain.setGain(g);
     }
@@ -45,6 +57,7 @@ class SoundManager {
     clips = new HashMap<String, Clip>();
 
     // Add clips.
+    addClip("prologue",   "environment_1.mp3");
     addClip("soundscape", "environment_1.mp3");
 
     ac.out.addInput(masterGain);
@@ -54,12 +67,21 @@ class SoundManager {
     ac.start();
   }
 
+  void reset() {
+    for (Map.Entry<String, Clip> clip : clips.entrySet()) {
+      clip.getValue().pause();
+      clip.getValue().reset();
+      clip.getValue().setGain(1);
+    }
+    beat.setGain(1);
+  }
+
   void addClip(String label, String fileName) {
     clips.put(label, new Clip(fileName));
   }
 
   Map<String, Clip> getClips() { return clips; }
-  
+
   Clip getClip(String label) {
     return clips.get(label);
   }
