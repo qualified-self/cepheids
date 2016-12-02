@@ -88,7 +88,7 @@ class Environment {
       PVector target = f.fireParticle.getTarget();
 
       //Wander for a cerain amount of time
-      if (currentTimeStage < 2000) {
+      if (currentTimeStage < 20000) {
 
         if (currentTimeStage%15 == 0)
           f.getFireParticle().seek(target);
