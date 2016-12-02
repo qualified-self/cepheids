@@ -14,6 +14,7 @@ class Particle {
   float leAngle;
   float headSize;
 
+  //Initial size of the first part of the tail.
   final float SIZE_SEG = 1.2;
 
   //Setting location within ring
@@ -43,19 +44,11 @@ class Particle {
   //Checks if angents have arrived to the ring
   private boolean arrived = false;
 
-  //Allows for trace to happen only when firefly flashes (optimization trick)
-  private boolean startLeavingTrace = false;
-
-  private int traceTimer;
-  private int traceCurrentTimer;
-
-  private float wingFlapScale;
-  private float wingFlapSpeed;
-  private float wingFlapPulse;
-
   private boolean pulseFromPlace;
   private int pulseTimer;
   private int pulseCurrentTimer;
+
+  private int flashFadeSpeed;
 
 
   Particle() {
@@ -75,7 +68,7 @@ class Particle {
     distanceWander = 80;
     smallChange = 0.008;
 
-    wandertheta = 0;
+    wandertheta += random(-smallChange*10, smallChange*10);
     wanderSpeed = random(0.4, 1);
     maxspeed = 0.9;
     limit = 1.2;
@@ -85,17 +78,13 @@ class Particle {
 
     anglePos = 0;
 
-    traceTimer = millis();
-
-    wingFlapScale = 90;
-    wingFlapSpeed = random(0.2, 0.4);
-    wingFlapPulse = random(0, 1);
-
     pulseFromPlace = false;
 
     offset = SIZE_SEG;
     headSize = SIZE_SEG*4;
     leAngle = 0;
+
+    flashFadeSpeed = 3;
 
     for (int i =0; i < positions.length; i++) {
       positions[i] = new PVector(location.x, location.y);
@@ -169,58 +158,26 @@ class Particle {
     display();
   }
 
-  //public void leaveTrace(Firefly f) {
-
-  //  if (f.getAction() > 0) {
-
-  //    startLeavingTrace = true;
-  //  }
-
-
-  //  if (startLeavingTrace) {
-  //    addParticleTrace();
-
-  //    updateTraceParticles();
-  //  }
-  //}
-
-  //private void updateTraceParticles() {
-
-  //  for (int i = traceParticles.size()-1; i > 0; i--) {
-
-  //    TraceParticles t = traceParticles.get(i);
-  //    t.drawParticle();
-  //    t.fadeAway();
-
-  //    if (t.isFaded()) {
-  //      traceParticles.remove(i);
-  //    }
-  //    if (traceParticles.size() < 2) {
-  //      startLeavingTrace = false;
-  //    }
-  //  }
-  //}
-
-  //private void addParticleTrace() {
-
-  //  traceCurrentTimer = millis() - traceTimer;
-
-  //  if (traceCurrentTimer%3 == 0) {
-
-  //    traceParticles.add(new TraceParticles(location, boidSize/2, fillColor));
-  //  }
-  //}
-
   void action(Firefly f) {
 
     if (f.getAction()> 0)
       fillColor = 255;
     else if (fillColor > 0)
-      fillColor -= 3;
+      fillColor -= flashFadeSpeed;
     else
       fillColor = 0;
 
     adjustedFillColor = intensity * fillColor;
+  }
+
+
+  //-----------Setter and Getter for flashing speed-------------//
+  public int getFlashFadeSpeed() {
+    return flashFadeSpeed;
+  }
+
+  public void setflashFadeSpeed(int newFadeSpeed) {
+    flashFadeSpeed = newFadeSpeed;
   }
 
   void update(Environment env) {
@@ -234,7 +191,7 @@ class Particle {
     if (env.getState() == 0)
       limit = 1;
     else
-    limit = 1.2;
+      limit = 1.2;
 
     velocity.limit(limit);
 
@@ -242,8 +199,6 @@ class Particle {
 
     // Reset accelertion to 0 each cycle
     acceleration.mult(0);
-
-    wingFlapPulse += wingFlapSpeed;
   }
 
   void applyForce(PVector force) {
@@ -331,7 +286,7 @@ class Particle {
     anglePos = newAngle;
   }
 
-  //pulse away from center when firefly fiers
+  //pulse away from center when firefly fires
   void particleResponse(float action) {
 
     PVector awayFromCenter = new PVector(width/2, height/2);
@@ -341,15 +296,7 @@ class Particle {
     awayFromCenter.mult(0.9);
 
     if (action > 0 && arrived) {
-      pulseFromPlace = true;
-      pulseTimer = millis();
-    }
-
-    if (pulseFromPlace) {
       applyForce(awayFromCenter);
-      pulseCurrentTimer = millis() - pulseTimer;
-      if (pulseCurrentTimer > 100)
-        pulseFromPlace = false;
     }
   }
 }

@@ -26,7 +26,7 @@ void setup() {
   size(1280, 720);
 
   // Create environment with all fireflies.
-  env = new Environment(N_AGENTS);
+  env = new Environment();
   for (int i=0; i<N_AGENTS; i++) {
     env.addFirefly();
   }
@@ -59,6 +59,12 @@ void draw() {
   //
   // // Set background lightness to the sum of all flashes.
   // background(round(average * 255));
+}
+
+void keyPressed(){
+ 
+  env.keyPressed();
+  
 }
 
 

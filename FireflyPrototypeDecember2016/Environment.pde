@@ -24,6 +24,8 @@ class Environment {
 
   int timeStage, currentTimeStage;
 
+  int timeLimitState2;
+
   private int state;
 
   // This is used to maintain a copy of next fireflies array
@@ -31,7 +33,7 @@ class Environment {
   ArrayList<Firefly> nextFireflies;
 
 
-  Environment(int setNumberOfParticles) {
+  Environment() {
     fireflies = new ArrayList<Firefly>();
 
     firefliesDefaultPeriod = PERIOD;
@@ -41,9 +43,9 @@ class Environment {
 
     nextFireflies = new ArrayList<Firefly>();
 
-    this.numberOfParticles = setNumberOfParticles;
-
     heart = new Heart();
+
+    timeLimitState2 = 20000;
 
     for (int i = 0; i < rings.length; i++)
       rings[i] = (70*i);
@@ -53,8 +55,8 @@ class Environment {
     state = 0;
   }
 
-  public int getState(){
-   return state;
+  public int getState() {
+    return state;
   }
 
   void init() {
@@ -65,7 +67,6 @@ class Environment {
     started = false;
 
     heart.reset();
-    initialize();
   }
 
   void start() {
@@ -91,23 +92,39 @@ class Environment {
       PVector target = f.fireParticle.getTarget();
 
       //Wander for a cerain amount of time
-      if(currentTimeStage < 20000){
+      if (currentTimeStage < timeLimitState2) {
 
-        if(currentTimeStage%15 == 0)
+        if (currentTimeStage%15 == 0)
           f.getFireParticle().seek(target);
         else
           f.getFireParticle().wander();
-      }
-
-      else {
-        state = 1;
-        f.getFireParticle().seek(target);
-        f.pulseAway();
+      } else {
+        changeToRingState(f, target);
       }
     }
 
     heart.reset();
   }
+
+
+  //Sets the time it takes for fireflies to go into the second state (state = 1)
+  void setTimeLimitState2(int timeLimit){
+   timeLimitState2 =  timeLimit;
+  }
+
+  //Gets the time it takes for fireflies to go into the second state (state = 1)
+  public int getTimeLimitState2(){
+   return timeLimitState2;
+  }
+
+
+  void changeToRingState(Firefly f, PVector target) {
+    state = 1;
+    initialize();
+    f.getFireParticle().seek(target);
+    f.pulseAway();
+  }
+
 
   void drawParticle() {
     for (Firefly f : fireflies)
@@ -139,8 +156,8 @@ class Environment {
         angleStep /= numParticlesPerLevel;
         stopIndex = numParticlesPerLevel + indexed;
       } else {
-       angleStep = angleStep/particleCounter;
-       stopIndex = numberOfParticles;
+        angleStep = angleStep/particleCounter;
+        stopIndex = numberOfParticles;
       }
 
       for (int i = indexed; i < stopIndex; i++) {
@@ -206,16 +223,24 @@ class Environment {
     return heart.getAction();
   }
 
-  int nFireflies() { return fireflies.size(); }
-  boolean hasFireflies() { return !fireflies.isEmpty(); }
-  Firefly getFirefly(int i) { return fireflies.get(i); }
+  int nFireflies() {
+    return fireflies.size();
+  }
+  boolean hasFireflies() {
+    return !fireflies.isEmpty();
+  }
+  Firefly getFirefly(int i) {
+    return fireflies.get(i);
+  }
 
-  ArrayList<Firefly> getFireflies() { return fireflies; }
+  ArrayList<Firefly> getFireflies() {
+    return fireflies;
+  }
 
   ArrayList<Firefly> getRandomFireflies(ArrayList<Firefly> orig, int n) {
     // Generate shuffled list of all indices.
     ArrayList<Integer> range = new ArrayList<Integer>();
-    for(int i = 0; i < orig.size(); i++)
+    for (int i = 0; i < orig.size(); i++)
       range.add(i);
     Collections.shuffle(range);
 
@@ -241,6 +266,7 @@ class Environment {
     nextFireflies.add(f);
     f.init();
     f.getFireParticle().setIntensity(firefliesColorIntensity);
+    numberOfParticles++;
     if (started)
       f.start(this);
     return f;
@@ -250,7 +276,7 @@ class Environment {
   Firefly removeFirefly() {
     if (!nextFireflies.isEmpty())
       return removeFirefly(
-               nextFireflies.get((int)random(nextFireflies.size())));
+        nextFireflies.get((int)random(nextFireflies.size())));
     else
       return null;
   }
@@ -268,4 +294,13 @@ class Environment {
     }
     return sum / fireflies.size();
   }
+
+  void keyPressed(){
+
+    if(key == 32){
+      addFirefly();
+    }
+
+  }
+
 }
