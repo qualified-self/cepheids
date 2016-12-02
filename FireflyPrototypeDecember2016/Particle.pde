@@ -289,15 +289,6 @@ class Particle {
     awayFromCenter.mult(0.9);
 
     if (action > 0 && arrived) {
-      pulseFromPlace = true;
-      pulseTimer = millis();
-    }
-
-    if (pulseFromPlace) {
       applyForce(awayFromCenter);
-      pulseCurrentTimer = millis() - pulseTimer;
-      if (pulseCurrentTimer > 100)
-        pulseFromPlace = false;
-    }
   }
 }
