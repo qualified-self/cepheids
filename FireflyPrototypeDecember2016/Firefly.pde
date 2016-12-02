@@ -133,6 +133,11 @@ class Firefly {
     mainTimer.restart(round(phase * flashPeriod * 1000));
   }
 
+  /// De-synchronize by changing to random phase.
+  void dePhase() {
+    // Offset the period so as to desynchronize the agents.
+    setPhase(random(1));
+  }
   /// Returns incoming "light" for this agent. For now it will be 0 if no agents have flashed and 1 otherwise.
   float getIncoming(Environment env) {
     float incoming = 0;
@@ -149,9 +154,8 @@ class Firefly {
 
   /// Start the firefly.
   float start(Environment env) {
-    // Offset the period so as to desynchronize the agents.
-    setPhase(random(1));
-    println(mainTimer.elapsed());
+    // Select random phase.
+    dePhase();
 
     // Init
     _changeState(FireflyState.IDLE, 0);
