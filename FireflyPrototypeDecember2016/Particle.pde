@@ -42,10 +42,6 @@ class Particle {
   //Checks if angents have arrived to the ring
   private boolean arrived = false;
 
-  private boolean pulseFromPlace;
-  private int pulseTimer;
-  private int pulseCurrentTimer;
-
   private int flashFadeSpeed;
 
 
@@ -61,27 +57,26 @@ class Particle {
 
     boidSize = 10.0;
 
+    //Wandering State intializations of variables
     radiusLoc = 20;
     distanceWander = 80;
     smallChange = 0.008;
-
     wandertheta += random(-smallChange*10, smallChange*10);
     wanderSpeed = random(0.4, 1);
-    maxspeed = 0.9;
     limit = 1.2;
+    maxspeed = 0.9;
     maxForce = 0.05;
 
+    //Vector that sets the position of the particle within the ring
     initialTarget = new PVector();
 
     anglePos = 0;
-
-    pulseFromPlace = false;
 
     offset = SIZE_SEG;
     headSize = SIZE_SEG*4;
     leAngle = 0;
 
-    flashFadeSpeed = 3;
+    flashFadeSpeed = 6;
 
     for (int i =0; i < positions.length; i++) {
       positions[i] = new PVector(location.x, location.y);
@@ -94,7 +89,7 @@ class Particle {
 
     angleHead = velocity.heading2D()+ PI/2;
 
-    stroke(255, fillColor);
+    stroke(fillColor);
     strokeWeight(0.5);
     pushMatrix();
     translate(positions[0].x, positions[0].y);
@@ -137,7 +132,7 @@ class Particle {
     vertex(0-offset, 0+offset);
     endShape(CLOSE);
     noStroke();
-    fill(255, fillColor);
+    fill(fillColor);
     ellipse(0, offset, offset/3, offset/3);
     popMatrix();
   }
