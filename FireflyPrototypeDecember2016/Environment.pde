@@ -240,6 +240,7 @@ class Environment {
   Firefly addFirefly(Firefly f) {
     nextFireflies.add(f);
     f.init();
+    f.getFireParticle().setIntensity(firefliesColorIntensity);
     if (started)
       f.start(this);
     return f;
