@@ -1,4 +1,4 @@
-/*
+d /*
  * Firefly
  *
  * (c) 2012 Sofian Audry -- info(@)sofianaudry(.)com
@@ -138,6 +138,15 @@ class Firefly {
     // Offset the period so as to desynchronize the agents.
     setPhase(random(1));
   }
+
+  void setFlashAdjust(float flashAdjust) {
+    this.flashAdjust = flashAdjust;
+  }
+
+  void setHeartBeatAdjustFactor(float heartBeatAdjustFactor) {
+    this.heartBeatAdjustFactor = heartBeatAdjustFactor;
+  }
+
   /// Returns incoming "light" for this agent. For now it will be 0 if no agents have flashed and 1 otherwise.
   float getIncoming(Environment env) {
     float incoming = 0;
