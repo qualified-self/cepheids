@@ -21,6 +21,8 @@ class Environment {
   int numberOfParticles;
 
   int timeStage, currentTimeStage;
+  
+  int timeLimitState2;
 
   private int state;
 
@@ -38,9 +40,9 @@ class Environment {
 
     nextFireflies = new ArrayList<Firefly>();
 
-    //this.numberOfParticles = setNumberOfParticles;
-
     heart = new Heart();
+    
+    timeLimitState2 = 20000;
 
     for (int i = 0; i < rings.length; i++)
       rings[i] = (70*i);
@@ -87,7 +89,7 @@ class Environment {
       PVector target = f.fireParticle.getTarget();
 
       //Wander for a cerain amount of time
-      if (currentTimeStage < 20000) {
+      if (currentTimeStage < timeToFindRing) {
 
         if (currentTimeStage%15 == 0)
           f.getFireParticle().seek(target);
@@ -99,6 +101,10 @@ class Environment {
     }
 
     heart.reset();
+  }
+  
+  void setTimeLimitState2(int timeLimit){
+   timeToFindRing =  timeLimit;
   }
 
 
