@@ -29,7 +29,7 @@ class Environment {
   ArrayList<Firefly> nextFireflies;
 
 
-  Environment(int setNumberOfParticles) {
+  Environment() {
     fireflies = new ArrayList<Firefly>();
 
     firefliesDefaultPeriod = PERIOD;
