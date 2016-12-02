@@ -13,6 +13,8 @@ class Environment {
   // Adjustment multiplier for heartbeat.
   float heartBeatAdjustFactor;
 
+  float firefliesColorIntensity;
+
   Heart heart;
 
   boolean started;
@@ -21,7 +23,7 @@ class Environment {
   int numberOfParticles;
 
   int timeStage, currentTimeStage;
-  
+
   int timeLimitState2;
 
   private int state;
@@ -37,11 +39,12 @@ class Environment {
     firefliesDefaultPeriod = PERIOD;
     flashAdjust = FLASH_ADJUST;
     heartBeatAdjustFactor = HEART_BEAT_ADUST_FACTOR;
+    firefliesColorIntensity = 0;
 
     nextFireflies = new ArrayList<Firefly>();
 
     heart = new Heart();
-    
+
     timeLimitState2 = 20000;
 
     for (int i = 0; i < rings.length; i++)
@@ -102,13 +105,13 @@ class Environment {
 
     heart.reset();
   }
-  
-  
+
+
   //Sets the time it takes for fireflies to go into the second state (state = 1)
   void setTimeLimitState2(int timeLimit){
    timeLimitState2 =  timeLimit;
   }
- 
+
   //Gets the time it takes for fireflies to go into the second state (state = 1)
   public int getTimeLimitState2(){
    return timeLimitState2;
@@ -205,6 +208,12 @@ class Environment {
       f.setHeartBeatAdjustFactor(heartBeatAdjustFactor);
   }
 
+  void setIntensity(float intensity) {
+    this.firefliesColorIntensity = intensity;
+    for (Firefly f : nextFireflies)
+      f.getFireParticle().setIntensity(firefliesColorIntensity);
+  }
+
   /// Registers heart beat.
   void registerBeat() {
     heart.beat();
@@ -214,17 +223,17 @@ class Environment {
     return heart.getAction();
   }
 
-  int nFireflies() { 
+  int nFireflies() {
     return fireflies.size();
   }
-  boolean hasFireflies() { 
+  boolean hasFireflies() {
     return !fireflies.isEmpty();
   }
-  Firefly getFirefly(int i) { 
+  Firefly getFirefly(int i) {
     return fireflies.get(i);
   }
 
-  ArrayList<Firefly> getFireflies() { 
+  ArrayList<Firefly> getFireflies() {
     return fireflies;
   }
 
@@ -256,7 +265,8 @@ class Environment {
   Firefly addFirefly(Firefly f) {
     nextFireflies.add(f);
     f.init();
-   numberOfParticles+=1;
+    f.getFireParticle().setIntensity(firefliesColorIntensity);
+    numberOfParticles++;
     if (started)
       f.start(this);
     return f;
@@ -284,13 +294,13 @@ class Environment {
     }
     return sum / fireflies.size();
   }
-  
+
   void keyPressed(){
-   
+
     if(key == 32){
       addFirefly();
     }
-    
+
   }
-  
+
 }

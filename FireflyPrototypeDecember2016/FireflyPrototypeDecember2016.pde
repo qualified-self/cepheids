@@ -38,6 +38,7 @@ void setup() {
   // Create OSC manager.
   oscManager = new OscManager(this);
   oscManager.build();
+  oscManager.reset();
 
   // Init environment.
   env.init();
