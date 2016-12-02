@@ -38,7 +38,7 @@ class Environment {
 
     nextFireflies = new ArrayList<Firefly>();
 
-    this.numberOfParticles = setNumberOfParticles;
+    //this.numberOfParticles = setNumberOfParticles;
 
     heart = new Heart();
 
@@ -62,7 +62,6 @@ class Environment {
     started = false;
 
     heart.reset();
-    initialize();
   }
 
   void start() {
@@ -105,6 +104,7 @@ class Environment {
 
   void changeToRingState(Firefly f, PVector target) {
     state = 1;
+    initialize();
     f.getFireParticle().seek(target);
     f.pulseAway();
   }
@@ -241,9 +241,9 @@ class Environment {
 
   /// Adds firefly.
   Firefly addFirefly(Firefly f) {
-    numberOfParticles += 1;
     nextFireflies.add(f);
     f.init();
+   numberOfParticles+=1;
     if (started)
       f.start(this);
     return f;
