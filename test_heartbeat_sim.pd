@@ -1,0 +1,46 @@
+#N canvas 810 81 1047 718 10;
+#X obj 31 303 metro 1000;
+#X obj 34 16 tgl 50 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X obj 31 363 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 160 56 vsl 15 128 0 150 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 6773 1;
+#X obj 122 222 /;
+#X msg 122 202 60;
+#X obj 113 11 loadbang;
+#X obj 121 244 * 1000;
+#X obj 31 462 udpsend;
+#X msg 206 433 disconnect;
+#X obj 104 399 packOSC;
+#X obj 30 488 tgl 15 0 empty empty 1=connected 20 8 0 8 -4034 -257985
+-1 0 1;
+#X floatatom 282 371 5 0 0 0 - - -, f 5;
+#X obj 33 396 sel 1;
+#X msg 32 433 connect 127.0.0.1 14000;
+#X floatatom 118 306 5 0 0 0 - - -, f 5;
+#X msg 90 361 /environment/heart/beat;
+#X floatatom 194 211 5 0 0 0 - - -, f 5;
+#X msg 159 35 80;
+#X connect 0 0 2 0;
+#X connect 0 0 16 0;
+#X connect 1 0 0 0;
+#X connect 1 0 13 0;
+#X connect 3 0 4 1;
+#X connect 3 0 5 0;
+#X connect 3 0 17 0;
+#X connect 4 0 7 0;
+#X connect 5 0 4 0;
+#X connect 6 0 5 0;
+#X connect 6 0 18 0;
+#X connect 7 0 0 1;
+#X connect 7 0 15 0;
+#X connect 8 0 11 0;
+#X connect 9 0 8 0;
+#X connect 10 0 8 0;
+#X connect 10 1 12 0;
+#X connect 13 0 14 0;
+#X connect 13 1 9 0;
+#X connect 14 0 8 0;
+#X connect 16 0 10 0;
+#X connect 18 0 3 0;
