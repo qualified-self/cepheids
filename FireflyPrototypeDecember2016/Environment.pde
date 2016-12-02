@@ -89,7 +89,7 @@ class Environment {
       PVector target = f.fireParticle.getTarget();
 
       //Wander for a cerain amount of time
-      if (currentTimeStage < timeToFindRing) {
+      if (currentTimeStage < timeLimitState2) {
 
         if (currentTimeStage%15 == 0)
           f.getFireParticle().seek(target);
@@ -103,8 +103,15 @@ class Environment {
     heart.reset();
   }
   
+  
+  //Sets the time it takes for fireflies to go into the second state (state = 1)
   void setTimeLimitState2(int timeLimit){
-   timeToFindRing =  timeLimit;
+   timeLimitState2 =  timeLimit;
+  }
+ 
+  //Gets the time it takes for fireflies to go into the second state (state = 1)
+  public int getTimeLimitState2(){
+   return timeLimitState2;
   }
 
 
