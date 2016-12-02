@@ -50,8 +50,8 @@ class Environment {
     state = 0;
   }
 
-  public int getState(){
-   return state;
+  public int getState() {
+    return state;
   }
 
   void init() {
@@ -88,23 +88,27 @@ class Environment {
       PVector target = f.fireParticle.getTarget();
 
       //Wander for a cerain amount of time
-      if(currentTimeStage < 20000){
+      if (currentTimeStage < 2000) {
 
-        if(currentTimeStage%15 == 0)
+        if (currentTimeStage%15 == 0)
           f.getFireParticle().seek(target);
         else
           f.getFireParticle().wander();
-      }
-
-      else {
-        state = 1;
-        f.getFireParticle().seek(target);
-        f.pulseAway();
+      } else {
+        changeToRingState(f, target);
       }
     }
 
     heart.reset();
   }
+
+
+  void changeToRingState(Firefly f, PVector target) {
+    state = 1;
+    f.getFireParticle().seek(target);
+    f.pulseAway();
+  }
+
 
   void drawParticle() {
     for (Firefly f : fireflies)
@@ -136,8 +140,8 @@ class Environment {
         angleStep /= numParticlesPerLevel;
         stopIndex = numParticlesPerLevel + indexed;
       } else {
-       angleStep = angleStep/particleCounter;
-       stopIndex = numberOfParticles;
+        angleStep = angleStep/particleCounter;
+        stopIndex = numberOfParticles;
       }
 
       for (int i = indexed; i < stopIndex; i++) {
@@ -197,16 +201,24 @@ class Environment {
     return heart.getAction();
   }
 
-  int nFireflies() { return fireflies.size(); }
-  boolean hasFireflies() { return !fireflies.isEmpty(); }
-  Firefly getFirefly(int i) { return fireflies.get(i); }
+  int nFireflies() { 
+    return fireflies.size();
+  }
+  boolean hasFireflies() { 
+    return !fireflies.isEmpty();
+  }
+  Firefly getFirefly(int i) { 
+    return fireflies.get(i);
+  }
 
-  ArrayList<Firefly> getFireflies() { return fireflies; }
+  ArrayList<Firefly> getFireflies() { 
+    return fireflies;
+  }
 
   ArrayList<Firefly> getRandomFireflies(ArrayList<Firefly> orig, int n) {
     // Generate shuffled list of all indices.
     ArrayList<Integer> range = new ArrayList<Integer>();
-    for(int i = 0; i < orig.size(); i++)
+    for (int i = 0; i < orig.size(); i++)
       range.add(i);
     Collections.shuffle(range);
 
@@ -240,7 +252,7 @@ class Environment {
   Firefly removeFirefly() {
     if (!nextFireflies.isEmpty())
       return removeFirefly(
-               nextFireflies.get((int)random(nextFireflies.size())));
+        nextFireflies.get((int)random(nextFireflies.size())));
     else
       return null;
   }

@@ -162,48 +162,6 @@ class Particle {
     display();
   }
 
-  //public void leaveTrace(Firefly f) {
-
-  //  if (f.getAction() > 0) {
-
-  //    startLeavingTrace = true;
-  //  }
-
-
-  //  if (startLeavingTrace) {
-  //    addParticleTrace();
-
-  //    updateTraceParticles();
-  //  }
-  //}
-
-  //private void updateTraceParticles() {
-
-  //  for (int i = traceParticles.size()-1; i > 0; i--) {
-
-  //    TraceParticles t = traceParticles.get(i);
-  //    t.drawParticle();
-  //    t.fadeAway();
-
-  //    if (t.isFaded()) {
-  //      traceParticles.remove(i);
-  //    }
-  //    if (traceParticles.size() < 2) {
-  //      startLeavingTrace = false;
-  //    }
-  //  }
-  //}
-
-  //private void addParticleTrace() {
-
-  //  traceCurrentTimer = millis() - traceTimer;
-
-  //  if (traceCurrentTimer%3 == 0) {
-
-  //    traceParticles.add(new TraceParticles(location, boidSize/2, fillColor));
-  //  }
-  //}
-
   void action(Firefly f) {
 
     if (f.getAction()> 0)
