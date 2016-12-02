@@ -60,6 +60,12 @@ void draw() {
   // background(round(average * 255));
 }
 
+void keyPressed(){
+ 
+  env.keyPressed();
+  
+}
+
 
 void oscEvent(OscMessage msg) {
   /* print the address pattern and the typetag of the received OscMessage */

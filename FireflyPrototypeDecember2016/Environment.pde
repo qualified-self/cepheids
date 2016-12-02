@@ -241,6 +241,7 @@ class Environment {
 
   /// Adds firefly.
   Firefly addFirefly(Firefly f) {
+    numberOfParticles += 1;
     nextFireflies.add(f);
     f.init();
     if (started)
@@ -270,4 +271,13 @@ class Environment {
     }
     return sum / fireflies.size();
   }
+  
+  void keyPressed(){
+   
+    if(key == 32){
+      addFirefly();
+    }
+    
+  }
+  
 }

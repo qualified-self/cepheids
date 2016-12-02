@@ -281,7 +281,7 @@ class Particle {
     anglePos = newAngle;
   }
 
-  //pulse away from center when firefly fiers
+  //pulse away from center when firefly fires
   void particleResponse(float action) {
 
     PVector awayFromCenter = new PVector(width/2, height/2);
