@@ -296,11 +296,8 @@ class Environment {
   }
 
   void keyPressed(){
-
     if(key == 32){
       addFirefly();
     }
-
   }
-
 }
