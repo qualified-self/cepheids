@@ -160,6 +160,20 @@ class Environment {
       f.setPeriod(firefliesDefaultPeriod);
   }
 
+  /// De-synchronize by changing to random phase.
+  void dePhaseAll() {
+    for (Firefly f : nextFireflies)
+      f.dePhase();
+  }
+
+  /// De-synchronize a certain number of fireflies.
+  void dePhase(int nFireflies) {
+    ArrayList<Firefly> randomFireflies = getRandomFireflies(nextFireflies, nFireflies);
+
+    for (Firefly f : randomFireflies)
+      f.dePhase();
+  }
+
   /// Register heart beat.
   /// Sets adjustment factor for all fireflies.
   void setFlashAdjust(float flashAdjust) {
