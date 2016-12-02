@@ -65,6 +65,7 @@ class Particle {
     distanceWander = 80;
     smallChange = 0.008;
 
+    wandertheta += random(-smallChange*10, smallChange*10);
     wanderSpeed = random(0.4, 1);
     maxspeed = 0.9;
     limit = 1.2;
