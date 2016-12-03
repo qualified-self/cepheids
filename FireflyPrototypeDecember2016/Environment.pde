@@ -22,10 +22,6 @@ class Environment {
   int[] rings = new int[30];
   int numberOfParticles;
 
-  int timeStage, currentTimeStage;
-
-  int timeLimitState2;
-
   private int state;
 
   int[] ringRadiusForParticles;
@@ -52,8 +48,6 @@ class Environment {
 
     heart = new Heart();
 
-    timeLimitState2 = 20000;
-
     indexOfAddedAgents = 0;
 
     //So that when added, the index becomes 0;
@@ -64,8 +58,6 @@ class Environment {
 
     for (int i = 0; i < rings.length; i++)
       rings[i] = (70*i);
-
-    timeStage = millis();
 
     state = 0;
   }
@@ -103,12 +95,9 @@ class Environment {
 
     drawParticle();
 
-    //currentTimeStage =millis() - timeStage;
-
-
     if (state == 0) {
       wanderState();
-    } else if (state == 1) {   
+    } else if (state == 1) {
       ringState();
     }
 
@@ -131,18 +120,6 @@ class Environment {
     }
   }
 
-
-  //Sets the time it takes for fireflies to go into the second state (state = 1)
-  void setTimeLimitState2(int timeLimit) {
-    timeLimitState2 =  timeLimit;
-  }
-
-  //Gets the time it takes for fireflies to go into the second state (state = 1)
-  public int getTimeLimitState2() {
-    return timeLimitState2;
-  }
-
-
   void setStateWander() {
     state = 0;
   }
@@ -154,7 +131,6 @@ class Environment {
   void setState(int stateSet) {
     state = stateSet;
   }
-
 
   void drawParticle() {
     for (Firefly f : fireflies)
@@ -205,7 +181,7 @@ class Environment {
 
       ringIndex ++;
     }
-  } 
+  }
 
   void stateTwoTarget() {
 
@@ -217,8 +193,6 @@ class Environment {
       f.getFireParticle().makeTarget( ringRadiusForParticles[indexOfAddedAgents]);
     }
   }
-
-
 
   /// Adjusts period of all fireflies.
   void setPeriod(float period) {
