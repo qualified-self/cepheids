@@ -1,7 +1,7 @@
 import beads.*;
 
 // Number of firefly agents.
-final int N_AGENTS = 100;
+final int MAX_NUM_AGENTS = 100;
 
 // Oscillation period (in seconds).
 final float INIT_BPM    = 80.0f; // normal BPM at rest is 60-100 BPM
@@ -26,8 +26,8 @@ void setup() {
   size(1280, 720);
 
   // Create environment with all fireflies.
-  env = new Environment();
-  for (int i=0; i<N_AGENTS; i++) {
+  env = new Environment(MAX_NUM_AGENTS);
+  for (int i=0; i<MAX_NUM_AGENTS; i++) {
     env.addFirefly();
   }
 

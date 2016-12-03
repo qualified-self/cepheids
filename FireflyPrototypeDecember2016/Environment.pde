@@ -15,7 +15,7 @@ class Environment {
 
   float firefliesColorIntensity;
 
-  Heart heart;
+   Heart heart;
 
   boolean started;
 
@@ -27,25 +27,33 @@ class Environment {
   int timeLimitState2;
 
   private int state;
+  
+  PVector[] ringPositions;
+  float[] ringAngles;
 
   // This is used to maintain a copy of next fireflies array
   // in order to allow for concurrent add/remove of fireflies.
   ArrayList<Firefly> nextFireflies;
 
 
-  Environment() {
+  Environment(int maxNumberOfAgents) {
     fireflies = new ArrayList<Firefly>();
 
     firefliesDefaultPeriod = PERIOD;
     flashAdjust = FLASH_ADJUST;
     heartBeatAdjustFactor = HEART_BEAT_ADUST_FACTOR;
     firefliesColorIntensity = 0;
+    
+    numberOfParticles = maxNumberOfAgents;
 
     nextFireflies = new ArrayList<Firefly>();
 
     heart = new Heart();
 
     timeLimitState2 = 20000;
+    
+    ringPositions = new PVector[numberOfParticles];
+    ringAngles = new float[numberOfParticles];
 
     for (int i = 0; i < rings.length; i++)
       rings[i] = (70*i);
