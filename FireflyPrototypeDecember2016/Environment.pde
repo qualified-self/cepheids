@@ -15,7 +15,7 @@ class Environment {
 
   float firefliesColorIntensity;
 
-   Heart heart;
+  Heart heart;
 
   boolean started;
 
@@ -27,9 +27,11 @@ class Environment {
   int timeLimitState2;
 
   private int state;
-  
-  PVector[] ringPositions;
+
+  int[] ringRadiusForParticles;
   float[] ringAngles;
+
+  int indexOfAddedAgents;
 
   // This is used to maintain a copy of next fireflies array
   // in order to allow for concurrent add/remove of fireflies.
@@ -43,7 +45,7 @@ class Environment {
     flashAdjust = FLASH_ADJUST;
     heartBeatAdjustFactor = HEART_BEAT_ADUST_FACTOR;
     firefliesColorIntensity = 0;
-    
+
     numberOfParticles = maxNumberOfAgents;
 
     nextFireflies = new ArrayList<Firefly>();
@@ -51,8 +53,13 @@ class Environment {
     heart = new Heart();
 
     timeLimitState2 = 20000;
-    
-    ringPositions = new PVector[numberOfParticles];
+
+    indexOfAddedAgents = 0;
+
+    //So that when added, the index becomes 0;
+    indexOfAddedAgents = -1;
+
+    ringRadiusForParticles = new int[numberOfParticles];
     ringAngles = new float[numberOfParticles];
 
     for (int i = 0; i < rings.length; i++)
@@ -72,6 +79,8 @@ class Environment {
 
     for (Firefly f : fireflies)
       f.init();
+
+    initialize();
     started = false;
 
     heart.reset();
@@ -94,43 +103,56 @@ class Environment {
 
     drawParticle();
 
-    currentTimeStage =millis() - timeStage;
+    //currentTimeStage =millis() - timeStage;
 
-    for (Firefly f : fireflies) {
-      PVector target = f.fireParticle.getTarget();
 
-      //Wander for a cerain amount of time
-      if (currentTimeStage < timeLimitState2) {
-
-        if (currentTimeStage%15 == 0)
-          f.getFireParticle().seek(target);
-        else
-          f.getFireParticle().wander();
-      } else {
-        changeToRingState(f, target);
-      }
+    if (state == 0) {
+      wanderState();
+    } else if (state == 1) {   
+      ringState();
     }
 
     heart.reset();
   }
 
+  void wanderState() {
+
+    for (Firefly f : fireflies) {
+      f.getFireParticle().wander();
+    }
+  }
+
+  void ringState() {
+
+    for (Firefly f : fireflies) {
+      PVector target = f.fireParticle.getTarget();
+      f.getFireParticle().seek(target);
+      f.pulseAway();
+    }
+  }
+
 
   //Sets the time it takes for fireflies to go into the second state (state = 1)
-  void setTimeLimitState2(int timeLimit){
-   timeLimitState2 =  timeLimit;
+  void setTimeLimitState2(int timeLimit) {
+    timeLimitState2 =  timeLimit;
   }
 
   //Gets the time it takes for fireflies to go into the second state (state = 1)
-  public int getTimeLimitState2(){
-   return timeLimitState2;
+  public int getTimeLimitState2() {
+    return timeLimitState2;
   }
 
 
-  void changeToRingState(Firefly f, PVector target) {
+  void setStateWander() {
+    state = 0;
+  }
+
+  void setStateRing() {
     state = 1;
-    initialize();
-    f.getFireParticle().seek(target);
-    f.pulseAway();
+  }
+
+  void setState(int stateSet) {
+    state = stateSet;
   }
 
 
@@ -172,14 +194,31 @@ class Environment {
 
         Firefly f = fireflies.get(i);
         angle += angleStep;
-        f.getFireParticle().setAnglePos(angle);
-        f.getFireParticle().makeTarget(radious);
+
+        ringRadiusForParticles[i] = radious;
+        ringAngles[i] = angle;
+
+        //f.getFireParticle().setAnglePos(angle);
+        //f.getFireParticle().makeTarget(radious);
         indexed = i+1;
       }
 
       ringIndex ++;
     }
+  } 
+
+  void stateTwoTarget() {
+
+    if (indexOfAddedAgents >= 0) {
+
+      Firefly f = nextFireflies.get(indexOfAddedAgents);
+
+      f.getFireParticle().setAnglePos(ringAngles[indexOfAddedAgents]);
+      f.getFireParticle().makeTarget( ringRadiusForParticles[indexOfAddedAgents]);
+    }
   }
+
+
 
   /// Adjusts period of all fireflies.
   void setPeriod(float period) {
@@ -274,7 +313,9 @@ class Environment {
     nextFireflies.add(f);
     f.init();
     f.getFireParticle().setIntensity(firefliesColorIntensity);
-    numberOfParticles++;
+    indexOfAddedAgents++;
+    stateTwoTarget();
+    //numberOfParticles++;
     if (started)
       f.start(this);
     return f;
@@ -303,8 +344,8 @@ class Environment {
     return sum / fireflies.size();
   }
 
-  void keyPressed(){
-    if(key == 32){
+  void keyPressed() {
+    if (key == 32) {
       addFirefly();
     }
   }
