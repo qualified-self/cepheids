@@ -120,11 +120,11 @@ class Environment {
     }
   }
 
-  void setStateWander() {
+  void setStateToWander() {
     state = 0;
   }
 
-  void setStateRing() {
+  void setStateToRing() {
     state = 1;
   }
 

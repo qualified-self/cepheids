@@ -44,7 +44,9 @@ class OscManager {
     oscP5.plug(env, "setPeriod",                "/environment/firefly/period", "f");
     oscP5.plug(env, "setFlashAdjust",           "/environment/firefly/flash-adjust", "f");
     oscP5.plug(env, "setHeartBeatAdjustFactor", "/environment/firefly/heart-beat-adjust-factor", "f");
-    oscP5.plug(env, "setIntensity",      "/environment/firefly/intensity", "f");
+    oscP5.plug(env, "setIntensity",             "/environment/firefly/intensity", "f");
+    oscP5.plug(env, "setStateToWander",         "/environment/firefly/state-wander", "");
+    oscP5.plug(env, "setStateToRing",           "/environment/firefly/state-ring", "");
 
     oscP5.plug(env, "dePhaseAll",    "/environment/firefly/de-phase-all", "");
     oscP5.plug(env, "dePhase",       "/environment/firefly/de-phase-many", "i");
