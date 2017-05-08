@@ -168,7 +168,7 @@ class Environment {
 
       for (int i = indexed; i < stopIndex; i++) {
 
-        Firefly f = fireflies.get(i);
+//        Firefly f = fireflies.get(i);
         angle += angleStep;
 
         ringRadiusForParticles[i] = radious;

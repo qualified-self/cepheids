@@ -23,13 +23,15 @@ OscManager oscManager;
 SoundManager soundManager;
 
 void setup() {
-  size(1280, 720);
+  //size(1280, 720);
+  fullScreen(1);
 
   // Create environment with all fireflies.
   env = new Environment(MAX_NUM_AGENTS);
-  for (int i=0; i<MAX_NUM_AGENTS; i++) {
-    env.addFirefly();
-  }
+  env.addFirefly();
+//  for (int i=0; i<MAX_NUM_AGENTS; i++) {
+//    env.addFirefly();
+//  }
 
   // Initialize audio.
   soundManager = new SoundManager();
@@ -62,9 +64,9 @@ void draw() {
 }
 
 void keyPressed(){
- 
+
   env.keyPressed();
-  
+
 }
 
 
