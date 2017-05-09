@@ -89,14 +89,21 @@ class Particle {
   void setIntensity(float intensity) {
     this.intensity = intensity;
   }
-
   
+ void setArrivedToFalse() {
+   arrived = false;
+ }
+
+  PVector centro = new PVector(width/2, height/2);
 
   void display() {
 
     offset = SIZE_SEG;
 
-    angleHead = velocity.heading2D()+ PI/2;
+    if(!arrived)
+      angleHead = velocity.heading2D()+ PI/2;
+    else 
+       angleHead = PVector.sub(centro, location).heading2D() + PI/2; 
 
     stroke(255, adjustedFillColor);
     strokeWeight(0.5);
@@ -108,6 +115,7 @@ class Particle {
     popMatrix();
 
     positions[0] = location;
+    
     for (int i =positions.length-2; i >= 0; i--) {
       
       if(!arrived)
@@ -247,11 +255,7 @@ class Particle {
   void moveTowards(PVector target) {
 
     PVector desiredLoc = PVector.sub(target, location);
-
-    //float dist = desiredLoc.mag();
-
     desiredLoc.normalize();
-
     desiredLoc.mult(wanderSpeed);
     PVector seek = PVector.sub(desiredLoc, velocity);
     seek.limit(maxForce);
@@ -264,18 +268,32 @@ class Particle {
   void seek(PVector target) {
 
     PVector desiredLoc = PVector.sub(target, location);
-
     float dist = desiredLoc.mag();
-
     desiredLoc.normalize();
     if (dist < 10) {
-
       float ease = map(dist, 0, 10, 0, maxspeed);
       desiredLoc.mult(ease);
-
-      if (dist< 0.5) arrived = true;
+      
     } else {
+      desiredLoc.mult(maxspeed);
+    }
 
+    PVector seek = PVector.sub(desiredLoc, velocity);
+    seek.limit(maxForce);
+    applyForce(seek);
+  }
+  
+  void seekRing() {
+    PVector desiredLoc = PVector.sub(initialTarget, location);
+    float dist = desiredLoc.mag();
+    desiredLoc.normalize();
+    if (dist < 10) {
+      float ease = map(dist, 0, 10, 0, maxspeed);
+      desiredLoc.mult(ease);
+      
+      if (!arrived && dist< 0.5) arrived = true;
+      
+    } else {
       desiredLoc.mult(maxspeed);
     }
 
@@ -304,11 +322,9 @@ class Particle {
   //pulse away from center when firefly fires
   void particleResponse(float action) {
 
-    PVector awayFromCenter = new PVector(width/2, height/2);
-    awayFromCenter = PVector.sub(awayFromCenter, location);
-    awayFromCenter.mult(-1);
+    PVector awayFromCenter = PVector.sub(location, centro);
     awayFromCenter.normalize();
-    awayFromCenter.mult(0.9);
+    awayFromCenter.mult(0.6);
 
     if (action > 0 && arrived) {
       applyForce(awayFromCenter);

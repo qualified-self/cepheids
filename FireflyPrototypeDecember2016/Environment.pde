@@ -108,6 +108,7 @@ class Environment {
 
     for (Firefly f : fireflies) {
       f.getFireParticle().wander();
+      f.getFireParticle().setArrivedToFalse();
     }
   }
 
@@ -115,7 +116,7 @@ class Environment {
 
     for (Firefly f : fireflies) {
       PVector target = f.fireParticle.getTarget();
-      f.getFireParticle().seek(target);
+      f.getFireParticle().seekRing(target);
       f.pulseAway();
     }
   }
