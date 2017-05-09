@@ -46,14 +46,20 @@ class Particle {
 
   private int flashFadeSpeed;
 
+  private float ringRadius;
+  
+  float angleSwimgAround;
+  PVector swimAround;
 
   Particle() {
 
     location = new PVector(random(width), random(height));
     velocity = new PVector(0, 0);
     acceleration = new PVector(0, 0);
+    swimAround= new PVector(0, 0);
 
     positions = new PVector[10];
+    angleSwimgAround = 0;
 
     fillColor = 0;
     intensity = 1.0;
@@ -262,7 +268,6 @@ class Particle {
     applyForce(seek);
   }
 
-
   //Seek force for seeking ring target (it has arrival and steer)
 
   void seek(PVector target) {
@@ -284,14 +289,56 @@ class Particle {
   }
   
   void seekRing() {
+    
     PVector desiredLoc = PVector.sub(initialTarget, location);
     float dist = desiredLoc.mag();
     desiredLoc.normalize();
+    
     if (dist < 10) {
+      
       float ease = map(dist, 0, 10, 0, maxspeed);
       desiredLoc.mult(ease);
       
       if (!arrived && dist< 0.5) arrived = true;
+      
+    } else {
+      desiredLoc.mult(maxspeed);
+    }
+
+    PVector seek = PVector.sub(desiredLoc, velocity);
+    seek.limit(maxForce);
+    applyForce(seek);
+  }
+  
+  boolean swimArrive = false;
+  
+   void swimAround() {
+   
+     if(!swimArrive) seekSwim();
+     
+     else 
+       {
+          swimAround.x = ringRadius * cos(angleSwimgAround) + width/2;
+          swimAround.y =  ringRadius * sin(angleSwimgAround) + height/2;
+          
+          PVector desiredLoc = PVector.sub(swimAround, location);
+          
+          angleSwimgAround += 0.1;
+       }
+  }
+  
+   void seekSwim() {
+    
+    PVector desiredLoc = PVector.sub(initialTarget, location);
+    float dist = desiredLoc.mag();
+    desiredLoc.normalize();
+    
+    if (dist < 10) {
+      
+      float ease = map(dist, 0, 10, 0, maxspeed);
+      desiredLoc.mult(ease);
+      
+      if (!swimArrive && dist< 0.5) swimArrive = true;
       
     } else {
       desiredLoc.mult(maxspeed);
@@ -310,8 +357,12 @@ class Particle {
   //Make a target within a ring
   void makeTarget(int radius) {
 
+    ringRadius = radius;
+    angleSwimgAround = anglePos;
     initialTarget.x = radius * cos(anglePos) + width/2;
     initialTarget.y =  radius * sin(anglePos) + height/2;
+    
+    swimAround = initialTarget.copy();
   }
 
   //set the position within the ring based

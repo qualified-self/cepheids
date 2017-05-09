@@ -99,9 +99,16 @@ class Environment {
       wanderState();
     } else if (state == 1) {
       ringState();
+      //swimAroundState();
     }
 
     heart.reset();
+  }
+  
+  void swimAroundState() {
+    for (Firefly f : fireflies) {
+      f.getFireParticle().swimAround();
+    }
   }
 
   void wanderState() {
@@ -116,7 +123,7 @@ class Environment {
 
     for (Firefly f : fireflies) {
       PVector target = f.fireParticle.getTarget();
-      f.getFireParticle().seekRing(target);
+      f.getFireParticle().seekRing();
       f.pulseAway();
     }
   }
