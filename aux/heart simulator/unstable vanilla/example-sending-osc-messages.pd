@@ -1,0 +1,33 @@
+#N canvas 1090 238 600 476 10;
+#X msg 300 310 disconnect;
+#X obj 235 210 list trim;
+#X msg 293 236 connect 192.168.1.104 12000;
+#X obj 231 371 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 88 405 this example shows how to send osc messages in pd vanilla.
+;
+#X text 378 312 disconnect;
+#X text 470 235 connect;
+#X msg 131 81 25 13.3 house;
+#X text 382 123 osc address;
+#X text 228 79 osc parameters;
+#X obj 131 217 oscparse;
+#X obj 132 274 print;
+#X text 127 297 debug print;
+#X text 471 268 connect;
+#X msg 294 269 connect localhost 12000;
+#X obj 235 185 list prepend send;
+#X floatatom 85 92 5 0 0 0 - - -, f 5;
+#X obj 232 338 netsend -u -b;
+#X obj 132 123 oscformat -f ifs /environment/heart/beat;
+#X connect 0 0 17 0;
+#X connect 1 0 17 0;
+#X connect 2 0 17 0;
+#X connect 7 0 18 0;
+#X connect 10 0 11 0;
+#X connect 14 0 17 0;
+#X connect 15 0 1 0;
+#X connect 16 0 18 0;
+#X connect 17 0 3 0;
+#X connect 18 0 10 0;
+#X connect 18 0 15 0;
