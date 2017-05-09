@@ -168,14 +168,11 @@ class Environment {
 
       for (int i = indexed; i < stopIndex; i++) {
 
-//        Firefly f = fireflies.get(i);
         angle += angleStep;
 
         ringRadiusForParticles[i] = radious;
         ringAngles[i] = angle;
 
-        //f.getFireParticle().setAnglePos(angle);
-        //f.getFireParticle().makeTarget(radious);
         indexed = i+1;
       }
 
@@ -247,9 +244,11 @@ class Environment {
   int nFireflies() {
     return fireflies.size();
   }
+  
   boolean hasFireflies() {
     return !fireflies.isEmpty();
   }
+  
   Firefly getFirefly(int i) {
     return fireflies.get(i);
   }
@@ -319,8 +318,25 @@ class Environment {
   }
 
   void keyPressed() {
-    if (key == 32) {
-      addFirefly();
+    
+    switch(key) {
+     
+      case 32:
+        addFirefly();
+        break;
+      case 'i':
+        setIntensity(0);
+        break;
+      case 'I':
+        setIntensity(1);
+        break;
+      case 'r':
+        setStateToRing();
+        break;
+        case 'w':
+        setStateToWander();
+        break;
+        default:;
     }
   }
 }

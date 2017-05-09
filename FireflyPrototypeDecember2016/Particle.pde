@@ -90,6 +90,8 @@ class Particle {
     this.intensity = intensity;
   }
 
+  
+
   void display() {
 
     offset = SIZE_SEG;
@@ -107,9 +109,27 @@ class Particle {
 
     positions[0] = location;
     for (int i =positions.length-2; i >= 0; i--) {
-      makeSegment(i+1, positions[i].x, positions[i].y);
+      
+      if(!arrived)
+        makeSegment(i+1, positions[i].x, positions[i].y);
+      else
+        makeSegmentRing(i+1, positions[i].x, positions[i].y);
+
       offset += SIZE_SEG/2;
     }
+  }
+
+  void makeSegmentRing(int index, float prevX, float prevY) {
+    
+    float x = width/2 - positions[index].x;
+    float y = height/2 - positions[index].y;
+    
+    leAngle = atan2(y, x);
+    
+    positions[index].x = prevX - cos(leAngle)*offset;
+    positions[index].y = prevY - sin(leAngle)*offset;
+    segment(positions[index].x, positions[index].y, leAngle);
+    
   }
 
   void makeSegment(int index, float xIn, float yIn) {
