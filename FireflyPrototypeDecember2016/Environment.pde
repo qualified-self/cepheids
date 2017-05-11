@@ -225,6 +225,11 @@ class Environment {
     for (Firefly f : randomFireflies)
       f.dePhase();
   }
+  
+  void setMaxForce(float force) {
+    for (Firefly f : nextFireflies)
+      f.getFireParticle().setMaxForce(force);
+  }
 
   /// Sets adjustment factor for all fireflies.
   void setFlashAdjust(float flashAdjust) {

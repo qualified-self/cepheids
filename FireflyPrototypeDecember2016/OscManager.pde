@@ -47,6 +47,7 @@ class OscManager {
     oscP5.plug(env, "setIntensity",             "/environment/firefly/intensity", "f");
     oscP5.plug(env, "setStateToWander",         "/environment/firefly/state-wander", "");
     oscP5.plug(env, "setStateToRing",           "/environment/firefly/state-ring", "");
+    oscP5.plug(env, "setMaxForce",             "/environment/firefly/max-force", "f");
 
     oscP5.plug(env, "dePhaseAll",    "/environment/firefly/de-phase-all", "");
     oscP5.plug(env, "dePhase",       "/environment/firefly/de-phase-many", "i");

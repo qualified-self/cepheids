@@ -243,6 +243,10 @@ class Particle {
     PVector f = force.get();
     acceleration.add(f);
   }
+  
+  void setMaxForce(float force) {
+    maxForce = force;
+  }
 
   void wander() {
 
@@ -281,9 +285,9 @@ class Particle {
     PVector desiredLoc = PVector.sub(target, location);
     desiredLoc.normalize();
     desiredLoc.mult(wanderSpeed);
-    PVector seek = PVector.sub(desiredLoc, velocity);
-    seek.limit(maxForce);
-    applyForce(seek);
+    PVector seekTarget = PVector.sub(desiredLoc, velocity);
+    seekTarget.limit(maxForce);
+    applyForce(seekTarget);
   }
 
   //Seek force for seeking ring target (it has arrival and steer)
