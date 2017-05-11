@@ -54,10 +54,10 @@ class Particle {
   
   float angleSwimgAround;
   PVector swimAround;
-
-  Particle() {
-
-    location = new PVector(random(width), random(height));
+  
+  Particle(PVector origin) {
+    
+    location = origin.copy();
     velocity = new PVector(0, 0);
     acceleration = new PVector(0, 0);
     swimAround= new PVector(0, 0);
@@ -94,6 +94,11 @@ class Particle {
     for (int i =0; i < positions.length; i++) {
       positions[i] = new PVector(location.x, location.y);
     }
+  }
+
+  Particle() {
+      this(new PVector(random(width), random(height)));
+    
   }
 
   void setIntensity(float intensity) {

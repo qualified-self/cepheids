@@ -71,14 +71,14 @@ class Firefly {
   // Particle for the firing.
   Particle fireParticle;
 
-  Firefly(float flashPeriod)
+  Firefly(float flashPeriod, PVector origin)
   {
-    this(flashPeriod, FLASH_ADJUST, 0.01, 0.01, 0.01, HEART_BEAT_ADUST_FACTOR);
+    this(flashPeriod, FLASH_ADJUST, 0.01, 0.01, 0.01, HEART_BEAT_ADUST_FACTOR, origin);
   }
 
-  Firefly(float flashPeriod, float flashAdjust, float heartBeatAdjustFactor)
+  Firefly(float flashPeriod, float flashAdjust, float heartBeatAdjustFactor, PVector origin)
   {
-    this(flashPeriod, flashAdjust, 0.01, 0.01, 0.01, heartBeatAdjustFactor);
+    this(flashPeriod, flashAdjust, 0.01, 0.01, 0.01, heartBeatAdjustFactor, origin);
   }
 
   Firefly(float flashPeriod,
@@ -86,7 +86,7 @@ class Firefly {
           float refractoryTime,
           float blindTime,
           float flashTime,
-          float heartBeatAdjustFactor)
+          float heartBeatAdjustFactor, PVector origin)
   {
     this.flashPeriod    = flashPeriod;
     this.flashAdjust    = flashAdjust;
@@ -98,7 +98,7 @@ class Firefly {
     mainTimer  = new Chrono(false);
     stateTimer = new Chrono(false);
 
-    fireParticle = new Particle();
+    fireParticle = new Particle(origin);
 
     state = FireflyState.IDLE;
   }
