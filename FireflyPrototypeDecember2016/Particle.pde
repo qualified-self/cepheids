@@ -28,6 +28,8 @@ class Particle {
 
   //Wandering fornce
   private float wandertheta;
+  private float r;
+
   private float maxForce;
   private float limit;
   private float wanderSpeed;
@@ -36,10 +38,6 @@ class Particle {
   private float radiusLoc;
   private float distanceWander;
   private float smallChange;
-  
-  float wanderR = 25;         // Radius for our "wander circle"
-  float wanderD = 80;         // Distance for our "wander circle"
-  float change = 0.3;
 
   private float maxspeed;
 
@@ -51,12 +49,16 @@ class Particle {
   private int flashFadeSpeed;
 
   private float ringRadius;
-  
+
   float angleSwimgAround;
   PVector swimAround;
-  
+
+  float wanderR = 25;         // Radius for our "wander circle"
+  float wanderD = 80;         // Distance for our "wander circle"
+  float change = 0.8;
+
   Particle(PVector origin) {
-    
+
     location = origin.copy();
     velocity = new PVector(0, 0);
     acceleration = new PVector(0, 0);
@@ -71,14 +73,15 @@ class Particle {
     boidSize = 10.0;
 
     //Wandering State intializations of variables
-    radiusLoc = 6;
-    distanceWander = 100;
-    smallChange = 0.003;
+
     //wandertheta += random(-smallChange, smallChange);
     wanderSpeed = random(0.4, 1);
     limit = 1.2;
     maxspeed = 0.9;
     maxForce = 0.05;
+
+    wandertheta = 0;
+    r = 6;
 
     //Vector that sets the position of the particle within the ring
     initialTarget = new PVector();
@@ -97,17 +100,18 @@ class Particle {
   }
 
   Particle() {
-      this(new PVector(random(width), random(height)));
-    
+    this(new PVector(random(width), random(height)));
   }
+
+  
 
   void setIntensity(float intensity) {
     this.intensity = intensity;
   }
-  
- void setArrivedToFalse() {
-   arrived = false;
- }
+
+  void setArrivedToFalse() {
+    arrived = false;
+  }
 
   PVector centro = new PVector(width/2, height/2);
 
@@ -115,10 +119,10 @@ class Particle {
 
     offset = SIZE_SEG;
 
-    if(!arrived)
+    if (!arrived)
       angleHead = velocity.heading2D()+ PI/2;
     else 
-       angleHead = PVector.sub(centro, location).heading2D() + PI/2; 
+    angleHead = PVector.sub(centro, location).heading2D() + PI/2; 
 
     stroke(255, adjustedFillColor);
     strokeWeight(0.5);
@@ -130,10 +134,10 @@ class Particle {
     popMatrix();
 
     positions[0] = location;
-    
+
     for (int i =positions.length-2; i >= 0; i--) {
-      
-      if(!arrived)
+
+      if (!arrived)
         makeSegment(i+1, positions[i].x, positions[i].y);
       else
         makeSegmentRing(i+1, positions[i].x, positions[i].y);
@@ -143,16 +147,15 @@ class Particle {
   }
 
   void makeSegmentRing(int index, float prevX, float prevY) {
-    
+
     float x = width/2 - positions[index].x;
     float y = height/2 - positions[index].y;
-    
+
     leAngle = atan2(y, x);
-    
+
     positions[index].x = prevX - cos(leAngle)*offset;
     positions[index].y = prevY - sin(leAngle)*offset;
     segment(positions[index].x, positions[index].y, leAngle);
-    
   }
 
   void makeSegment(int index, float xIn, float yIn) {
@@ -201,7 +204,7 @@ class Particle {
     if (f.getAction()> 0)
       fillColor = 255;
     else if (fillColor > 0)
-      fillColor -= flashFadeSpeed;
+      fillColor -= (flashFadeSpeed*1.5);
     else
       fillColor = 0;
 
@@ -243,7 +246,7 @@ class Particle {
     PVector f = force.get();
     acceleration.add(f);
   }
-  
+
   void setMaxForce(float force) {
     maxForce = force;
   }
@@ -251,43 +254,45 @@ class Particle {
   void wander() {
 
     // Randomly change wander theta
-    wandertheta += random(-smallChange, smallChange);
+    wandertheta += random(-change, change);
 
     // Start with velocity
     PVector circlepos = velocity.get();
     // Normalize to get heading
     circlepos.normalize();
     // Multiply by distance
-    circlepos.mult(distanceWander);
+    circlepos.mult(wanderD);
     // Make it relative to boid's position
     circlepos.add(location);
-    
-    stroke(255);
-    noFill();
-    ellipse(circlepos.x, circlepos.y, radiusLoc, radiusLoc);
 
     // Make it relative to boid's position
     float h = velocity.heading2D();
 
-    PVector circleOffSet = new PVector(radiusLoc*cos(wandertheta+h), radiusLoc*sin(wandertheta+h));
+    PVector circleOffSet = new PVector(wanderR*cos(wandertheta+h), wanderR*sin(wandertheta+h));
     PVector target = PVector.add(circlepos, circleOffSet);
-    
-     //stroke(255);
-    fill(255, 0, 0);
-    ellipse(target.x, target.y, radiusLoc/5, radiusLoc/5);
-    
+
     //apply to seeking method
     moveTowards(target);
+  }
+
+  void drawWanderStuff(PVector position, PVector circle, PVector target, float rad) {
+    stroke(0);
+    noFill();
+    ellipseMode(CENTER);
+    ellipse(circle.x, circle.y, rad*2, rad*2);
+    ellipse(target.x, target.y, 4, 4);
+    line(position.x, position.y, circle.x, circle.y);
+    line(circle.x, circle.y, target.x, target.y);
   }
 
   void moveTowards(PVector target) {
 
     PVector desiredLoc = PVector.sub(target, location);
     desiredLoc.normalize();
-    desiredLoc.mult(wanderSpeed);
-    PVector seekTarget = PVector.sub(desiredLoc, velocity);
-    seekTarget.limit(maxForce);
-    applyForce(seekTarget);
+    desiredLoc.mult(maxspeed);
+    PVector steer = PVector.sub(desiredLoc, velocity);
+    steer.limit(maxForce);
+    applyForce(steer);
   }
 
   //Seek force for seeking ring target (it has arrival and steer)
@@ -300,7 +305,6 @@ class Particle {
     if (dist < 10) {
       float ease = map(dist, 0, 10, 0, maxspeed);
       desiredLoc.mult(ease);
-      
     } else {
       desiredLoc.mult(maxspeed);
     }
@@ -309,20 +313,19 @@ class Particle {
     seek.limit(maxForce);
     applyForce(seek);
   }
-  
+
   void seekRing() {
-    
+
     PVector desiredLoc = PVector.sub(initialTarget, location);
     float dist = desiredLoc.mag();
     desiredLoc.normalize();
-    
+
     if (dist < 10) {
-      
+
       float ease = map(dist, 0, 10, 0, maxspeed);
       desiredLoc.mult(ease);
-      
+
       if (!arrived && dist< 0.5) arrived = true;
-      
     } else {
       desiredLoc.mult(maxspeed);
     }
@@ -331,42 +334,41 @@ class Particle {
     seek.limit(maxForce);
     applyForce(seek);
   }
-  
+
   boolean swimArrive = false;
-  
-   void swimAround() {
-   
-     if(!swimArrive) seekSwim();
-     
-     else 
-       {
-          swimAround.x = ringRadius * cos(angleSwimgAround) + width/2;
-          swimAround.y =  ringRadius * sin(angleSwimgAround) + height/2;
-          
-          println(ringRadius);
-          
-          //PVector desiredLoc = PVector.sub(swimAround, location);
-          //desiredLoc.normalize();
-          //desiredLoc.mult(ringRadius/700);
-          
-          seek(swimAround);
-          angleSwimgAround += 0.01;
-       }
+
+  void swimAround() {
+
+    if (!swimArrive) seekSwim();
+
+    else 
+    {
+      swimAround.x = ringRadius * cos(angleSwimgAround) + width/2;
+      swimAround.y =  ringRadius * sin(angleSwimgAround) + height/2;
+
+      println(ringRadius);
+
+      //PVector desiredLoc = PVector.sub(swimAround, location);
+      //desiredLoc.normalize();
+      //desiredLoc.mult(ringRadius/700);
+
+      seek(swimAround);
+      angleSwimgAround += 0.01;
+    }
   }
-  
-   void seekSwim() {
-    
+
+  void seekSwim() {
+
     PVector desiredLoc = PVector.sub(initialTarget, location);
     float dist = desiredLoc.mag();
     desiredLoc.normalize();
-    
+
     if (dist < 10) {
-      
+
       float ease = map(dist, 0, 10, 0, maxspeed);
       desiredLoc.mult(ease);
-      
+
       if (!swimArrive && dist< 0.5) swimArrive = true;
-      
     } else {
       desiredLoc.mult(maxspeed);
     }
@@ -388,7 +390,7 @@ class Particle {
     angleSwimgAround = anglePos;
     initialTarget.x = radius * cos(anglePos) + width/2;
     initialTarget.y =  radius * sin(anglePos) + height/2;
-    
+
     swimAround = initialTarget.copy();
   }
 
