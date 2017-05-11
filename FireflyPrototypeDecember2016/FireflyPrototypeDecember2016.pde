@@ -5,9 +5,9 @@ final int MAX_NUM_AGENTS = 100;
 
 // Oscillation period (in seconds).
 final float INIT_BPM    = 80.0f; // normal BPM at rest is 60-100 BPM
-final float PERIOD      = 60.0 / INIT_BPM;
-final float FLASH_ADJUST = 0.1f;
-final float HEART_BEAT_ADUST_FACTOR = 2.0f;
+final float PERIOD      = 60.0 / INIT_BPM;    
+final float FLASH_ADJUST = 0.1f;   //how much each firefly adjust based on each other
+final float HEART_BEAT_ADUST_FACTOR = 2.0f;  //
 
 // N. audio tracks for the beat generator.
 final int N_TRACKS  = 50;
@@ -28,10 +28,11 @@ void setup() {
 
   // Create environment with all fireflies.
   env = new Environment(MAX_NUM_AGENTS);
-  env.addFirefly();
+  
 //  for (int i=0; i<MAX_NUM_AGENTS; i++) {
 //    env.addFirefly();
 //  }
+
 
   // Initialize audio.
   soundManager = new SoundManager();

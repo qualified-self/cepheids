@@ -36,6 +36,10 @@ class Particle {
   private float radiusLoc;
   private float distanceWander;
   private float smallChange;
+  
+  float wanderR = 25;         // Radius for our "wander circle"
+  float wanderD = 80;         // Distance for our "wander circle"
+  float change = 0.3;
 
   private float maxspeed;
 
@@ -67,10 +71,10 @@ class Particle {
     boidSize = 10.0;
 
     //Wandering State intializations of variables
-    radiusLoc = 20;
-    distanceWander = 80;
-    smallChange = 0.008;
-    wandertheta += random(-smallChange*10, smallChange*10);
+    radiusLoc = 6;
+    distanceWander = 100;
+    smallChange = 0.003;
+    //wandertheta += random(-smallChange, smallChange);
     wanderSpeed = random(0.4, 1);
     limit = 1.2;
     maxspeed = 0.9;
@@ -248,12 +252,21 @@ class Particle {
     circlepos.mult(distanceWander);
     // Make it relative to boid's position
     circlepos.add(location);
+    
+    stroke(255);
+    noFill();
+    ellipse(circlepos.x, circlepos.y, radiusLoc, radiusLoc);
 
     // Make it relative to boid's position
     float h = velocity.heading2D();
 
     PVector circleOffSet = new PVector(radiusLoc*cos(wandertheta+h), radiusLoc*sin(wandertheta+h));
     PVector target = PVector.add(circlepos, circleOffSet);
+    
+     //stroke(255);
+    fill(255, 0, 0);
+    ellipse(target.x, target.y, radiusLoc/5, radiusLoc/5);
+    
     //apply to seeking method
     moveTowards(target);
   }
@@ -321,9 +334,14 @@ class Particle {
           swimAround.x = ringRadius * cos(angleSwimgAround) + width/2;
           swimAround.y =  ringRadius * sin(angleSwimgAround) + height/2;
           
-          PVector desiredLoc = PVector.sub(swimAround, location);
+          println(ringRadius);
           
-          angleSwimgAround += 0.1;
+          //PVector desiredLoc = PVector.sub(swimAround, location);
+          //desiredLoc.normalize();
+          //desiredLoc.mult(ringRadius/700);
+          
+          seek(swimAround);
+          angleSwimgAround += 0.01;
        }
   }
   

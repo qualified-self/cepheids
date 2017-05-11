@@ -100,15 +100,11 @@ class Environment {
     } else if (state == 1) {
       ringState();
       //swimAroundState();
+    } else if(state == 2) {
+      swimAroundState();
     }
 
     heart.reset();
-  }
-  
-  void swimAroundState() {
-    for (Firefly f : fireflies) {
-      f.getFireParticle().swimAround();
-    }
   }
 
   void wanderState() {
@@ -122,9 +118,15 @@ class Environment {
   void ringState() {
 
     for (Firefly f : fireflies) {
-      PVector target = f.fireParticle.getTarget();
       f.getFireParticle().seekRing();
       f.pulseAway();
+    }
+  }
+  
+  void swimAroundState() {
+    for (Firefly f : fireflies) {
+      f.getFireParticle().swimAround();
+      f.getFireParticle().setArrivedToFalse();
     }
   }
 
@@ -134,6 +136,10 @@ class Environment {
 
   void setStateToRing() {
     state = 1;
+  }
+  
+  void setStateSwimAround() {
+    state = 2;
   }
 
   void setState(int stateSet) {
@@ -341,8 +347,11 @@ class Environment {
       case 'r':
         setStateToRing();
         break;
-        case 'w':
+      case 'w':
         setStateToWander();
+        break;
+      case 's':
+        setStateSwimAround();
         break;
         default:;
     }
