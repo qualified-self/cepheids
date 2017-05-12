@@ -55,7 +55,7 @@ class Particle {
 
   float wanderR = 25;         // Radius for our "wander circle"
   float wanderD = 80;         // Distance for our "wander circle"
-  float change = 0.8;
+  float change = 1.2;
 
   Particle(PVector origin) {
 
@@ -270,6 +270,33 @@ class Particle {
 
     PVector circleOffSet = new PVector(wanderR*cos(wandertheta+h), wanderR*sin(wandertheta+h));
     PVector target = PVector.add(circlepos, circleOffSet);
+    
+    if(location.x > width - 25)
+     {
+       location.x = width - 25;
+       target.x *= -1;
+     }
+     
+    if(location.x < 25)
+     {
+       location.x = 25;
+       velocity.x *= -0.98;
+     }
+    
+    
+    if(location.y > height - 25)
+     {
+       location.y = height - 25;
+       target.y *= -1;
+     }
+     
+    if(location.y < 25)
+     {
+       location.y = 25;
+       velocity.y *= -0.98;
+     }
+      
+      
 
     //apply to seeking method
     moveTowards(target);

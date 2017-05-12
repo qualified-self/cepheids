@@ -57,7 +57,7 @@ class Environment {
     ringAngles = new float[numberOfParticles];
 
     for (int i = 0; i < rings.length; i++)
-      rings[i] = (70*i);
+      rings[i] = (120*i);
 
     state = 0;
   }
