@@ -57,7 +57,7 @@ class Environment {
     ringAngles = new float[numberOfParticles];
 
     for (int i = 0; i < rings.length; i++)
-      rings[i] = (120*i);
+      rings[i] = (320*i);
 
     state = 0;
   }
@@ -169,7 +169,7 @@ class Environment {
       int radious = rings[ringIndex] / 2;
       float circum = 2*PI*radious;
 
-      numParticlesPerLevel = int(circum / 20);
+      numParticlesPerLevel = int(circum / 30);
 
       if (particleCounter >= numParticlesPerLevel) {
 
