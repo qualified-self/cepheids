@@ -55,6 +55,11 @@ class Firefly {
 
   // Current state.
   FireflyState state;
+  
+  // Overrides everything and sync with heart.
+  boolean syncWithHeart;
+  int syncWithHeartEvery;
+  int syncWithHeartCounter;
 
   // Multi-purpose timer.
   Chrono stateTimer;
@@ -101,6 +106,9 @@ class Firefly {
     fireParticle = new Particle(origin);
 
     state = FireflyState.IDLE;
+    
+    syncWithHeart = false;
+    syncWithHeartEvery = 1;
   }
 
   void pulseAway() {
@@ -113,6 +121,17 @@ class Firefly {
 
   void displayParticle(Environment env) {
     fireParticle.run(this, env);
+  }
+  
+  void syncWithHeart(int every) {
+    syncWithHeart = true;
+    syncWithHeartEvery = every;
+    syncWithHeartCounter = every-1; // next call to step() will trigger action
+    println("sync with heart : " + every);
+  }
+  
+  void unsyncWithHeart() {
+    syncWithHeart = false;
   }
 
   void init() {
@@ -177,50 +196,72 @@ class Firefly {
 
   /// Perform one step and returns the action of the agent in [0..1].
   float step(Environment env) {
-    // Turn off (default).
-    action = 0;
-
-    // Incoming signal.
-    float incoming = getIncoming(env);
-
-    // Update statistics.
-    mean -= MOVING_AVERAGE_FACTOR * (mean - incoming);
-
-    //// Natural increase in power.
-    //if (state != FireflyState.FLASH)
-    //  power++;
-
-    // State machine.
-    switch (state) {
-    case IDLE: {
-        // Check for incoming flashes.
-        if (incoming > mean || env.getBeat() > 0) {
-          float adjust = flashAdjust * (env.getBeat() > 0 ? heartBeatAdjustFactor : 1);
-          mainTimer.add(round(flashPeriod * adjust * 1000));
-          state = FireflyState.BLIND;
-          stateTime = round(blindTime * 1000);
-          stateTimer.restart();
+    if (syncWithHeart) {
+      action = 0;
+      boolean heartBeat = (env.getBeat() > 0);
+      if (heartBeat) {
+        syncWithHeartCounter++;
+        println("counter: " + syncWithHeartCounter);
+        if (syncWithHeartCounter >= syncWithHeartEvery) {
+          syncWithHeartCounter = 0;
+          action = 1;
+          println("beat!");
         }
-        _checkFlash();
       }
-      break;
-
-    case BLIND:
-    case REFRACT:
-      // This section will apply to both uninterrupted blind
-      if (!_checkFlash()) { // If we must flash, do it and exit.
-        // When timer is out, transit to IDLE.
-        if (_timeOut()) state = FireflyState.IDLE;
-      }
-      break;
-
-    case FLASH:
-      // Flash baby!
-      _stepFlash();
-      break;
-    default:;
     }
-
+    
+    else {
+      // Turn off (default).
+      action = 0;
+  
+      // Incoming signal.
+      float incoming = getIncoming(env);
+  
+      // Update statistics.
+      mean -= MOVING_AVERAGE_FACTOR * (mean - incoming);
+  
+      //// Natural increase in power.
+      //if (state != FireflyState.FLASH)
+      //  power++;
+  
+      // State machine.
+      switch (state) {
+      case IDLE: {
+          float adjust = 0;
+          if (env.getBeat() > 0)
+            adjust = heartBeatAdjustFactor;
+          if (incoming > mean)
+            adjust += flashAdjust;
+            
+          // Check for incoming flashes.
+          if (adjust > 0) {
+//            float adjust = flashAdjust * (heartBeat ? heartBeatAdjustFactor : 1);
+            mainTimer.add(round(flashPeriod * adjust * 1000));
+            state = FireflyState.BLIND;
+            stateTime = round(blindTime * 1000);
+            stateTimer.restart();
+          }
+          _checkFlash();
+        }
+        break;
+  
+      case BLIND:
+      case REFRACT:
+        // This section will apply to both uninterrupted blind
+        if (!_checkFlash()) { // If we must flash, do it and exit.
+          // When timer is out, transit to IDLE.
+          if (_timeOut()) state = FireflyState.IDLE;
+        }
+        break;
+  
+      case FLASH:
+        // Flash baby!
+        _stepFlash();
+        break;
+      default:;
+      }
+    }
+    
     return action;
   }
 

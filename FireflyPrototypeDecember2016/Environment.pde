@@ -226,6 +226,21 @@ class Environment {
       f.dePhase();
   }
   
+    /// De-synchronize by changing to random phase.
+  void syncWithHeart(float every) {
+    syncWithHeart((int)every);
+  }
+  
+  void syncWithHeart(int every) {
+    for (Firefly f : nextFireflies)
+      f.syncWithHeart(every);
+  }
+
+  void unsyncWithHeart() {
+    for (Firefly f : nextFireflies)
+      f.unsyncWithHeart();
+  }
+  
   void setMaxForce(float force) {
     for (Firefly f : nextFireflies)
       f.getFireParticle().setMaxForce(force);
