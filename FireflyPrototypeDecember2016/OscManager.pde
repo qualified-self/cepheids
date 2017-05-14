@@ -43,21 +43,24 @@ class OscManager {
     // Environment actions.
     oscP5.plug(env, "setPeriod",                "/environment/firefly/period", "f");
     oscP5.plug(env, "setFlashAdjust",           "/environment/firefly/flash-adjust", "f");
-    oscP5.plug(env, "setHeartBeatAdjustFactor", "/environment/firefly/heart-beat-adjust-factor", "f");
+    oscP5.plug(env, "setHeartBeatAdjustFactor", "/environment/firefly/heart-beat-adjust", "f");
     oscP5.plug(env, "setIntensity",             "/environment/firefly/intensity", "f");
     oscP5.plug(env, "setStateToWander",         "/environment/firefly/state-wander", "");
     oscP5.plug(env, "setStateToRing",           "/environment/firefly/state-ring", "");
-    oscP5.plug(env, "setMaxForce",             "/environment/firefly/max-force", "f");
+    oscP5.plug(env, "setMaxForce",              "/environment/firefly/max-force", "f");
 
     oscP5.plug(env, "dePhaseAll",    "/environment/firefly/de-phase-all", "");
     oscP5.plug(env, "dePhase",       "/environment/firefly/de-phase-many", "i");
+    oscP5.plug(env, "dePhase",       "/environment/firefly/de-phase-many", "f");
 
-    oscP5.plug(env, "addFirefly",    "/environment/firefly/add", "");
-    oscP5.plug(env, "addRandomFireFly",    "/environment/firefly/add-random", "f");
-    oscP5.plug(env, "removeFirefly", "/environment/firefly/remove", "");
     oscP5.plug(env, "syncWithHeart",    "/environment/firefly/sync-with-heart", "f");
     oscP5.plug(env, "syncWithHeart",    "/environment/firefly/sync-with-heart", "i");
     oscP5.plug(env, "unsyncWithHeart",  "/environment/firefly/unsync-with-heart", "");
+
+    oscP5.plug(env, "addFirefly",         "/environment/firefly/add", "");
+    oscP5.plug(env, "addSpecialFirefly",  "/environment/firefly/add-special", "");
+    oscP5.plug(env, "addRandomFireFly",   "/environment/firefly/add-random", "f");
+    oscP5.plug(env, "removeFirefly",      "/environment/firefly/remove", "");
 
     oscP5.plug(env, "registerBeat",  "/environment/heart/beat", "");
   }

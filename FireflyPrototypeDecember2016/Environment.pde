@@ -219,6 +219,10 @@ class Environment {
   }
 
   /// De-synchronize a certain number of fireflies.
+  void dePhase(float nFireflies) {
+    dePhase(int(nFireflies));
+  }
+  
   void dePhase(int nFireflies) {
     ArrayList<Firefly> randomFireflies = getRandomFireflies(nextFireflies, nFireflies);
 
