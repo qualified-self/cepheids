@@ -1,7 +1,7 @@
 import beads.*;
 
 // Number of firefly agents.
-final int MAX_NUM_AGENTS = 100;
+final int MAX_NUM_AGENTS = 300;
 
 // Oscillation period (in seconds).
 final float INIT_BPM    = 80.0f; // normal BPM at rest is 60-100 BPM
@@ -25,17 +25,14 @@ OscManager oscManager;
 SoundManager soundManager;
 
 void setup() {
-  //size(1280, 720);
-  fullScreen(1);
+  
+  //-------- ADD P2D -------//
+//  size(1280, 720, P2D);
+  fullScreen(P2D, 1);
 
   // Create environment with all fireflies.
   env = new Environment(MAX_NUM_AGENTS);
   
-//  for (int i=0; i<MAX_NUM_AGENTS; i++) {
-//    env.addFirefly();
-//  }
-
-
   // Initialize audio.
   soundManager = new SoundManager();
   soundManager.start();
@@ -48,6 +45,14 @@ void setup() {
   // Init environment.
   env.init();
   env.start();
+
+//  for (int i=0; i<MAX_NUM_AGENTS; i++) {
+//    env.addFirefly();
+//  }
+//  env.setState(1);
+//  env.setIntensity(1);
+//  env.setMaxForce(0.05);
+
 }
 
 void draw() {

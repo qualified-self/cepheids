@@ -5,7 +5,7 @@ import java.util.*;
  */
 class SoundManager {
 
-  final String AUDIO_FILE_NAME = "heartbeat.wav";
+  final String AUDIO_FILE_NAME = "heartbeat_abs.mp3";
 
   class Clip {
     SamplePlayer player;
@@ -19,6 +19,7 @@ class SoundManager {
     }
 
     void play() {
+      println("playing");
       player.start();
     }
 
@@ -31,6 +32,7 @@ class SoundManager {
     }
 
     void setGain(float g) {
+      println("set gain: " + g);
       gain.setGain(g);
     }
 
@@ -95,6 +97,7 @@ class SoundManager {
   }
 
   void setMasterGain(float gain) {
+    println("Master gain: " + gain);
     masterGain.setGain(gain);
   }
 

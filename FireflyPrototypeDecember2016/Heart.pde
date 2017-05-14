@@ -12,6 +12,7 @@ class Heart {
 
   /// Register a heart beat.
   void beat() {
+    println("beat");
     action = 1;
   }
 

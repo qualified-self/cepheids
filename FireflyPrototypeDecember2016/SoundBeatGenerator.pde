@@ -59,7 +59,7 @@ class SoundBeatGenerator {
       gains.get(currentTrack).setGain(0);
       currentTrackGain = 0;
     }
-//    println("t = " + currentTrack + " w=" + weight);
+ //   println("t = " + currentTrack + " w=" + weight);
 
     // Second: adjust gain of current track.
     currentTrackGain = max(currentTrackGain, weight);
