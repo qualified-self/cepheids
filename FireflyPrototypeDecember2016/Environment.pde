@@ -314,6 +314,13 @@ class Environment {
     return addFirefly(firefliesDefaultPeriod);
   }
 
+  /// Adds firefly with default period.
+  Firefly addSpecialFirefly() {
+    Firefly f = addFirefly(firefliesDefaultPeriod);
+    f.getFireParticle().setBaseColor(color(#FFA600));
+    return f;
+  }
+
   /// Adds firefly with specific period.
   Firefly addFirefly(float period) {
     return addFirefly(new Firefly(period, flashAdjust, heartBeatAdjustFactor, new PVector(width/2, height/2)));
