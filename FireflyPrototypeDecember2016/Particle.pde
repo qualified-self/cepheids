@@ -57,6 +57,8 @@ class Particle {
   float wanderD = 80;         // Distance for our "wander circle"
   float change = 1.2;
 
+  color baseColor;
+  
   Particle(PVector origin) {
 
     location = origin.copy();
@@ -97,13 +99,17 @@ class Particle {
     for (int i =0; i < positions.length; i++) {
       positions[i] = new PVector(location.x, location.y);
     }
+   
+    baseColor = color(255, 255, 255);
   }
 
   Particle() {
     this(new PVector(random(width), random(height)));
   }
 
-  
+  void setBaseColor(color c) {
+    baseColor = c;
+  }
 
   void setIntensity(float intensity) {
     this.intensity = intensity;
@@ -124,12 +130,12 @@ class Particle {
     else 
     angleHead = PVector.sub(centro, location).heading2D() + PI/2; 
 
-    stroke(255, adjustedFillColor);
+    stroke(baseColor, adjustedFillColor);
     strokeWeight(0.5);
     pushMatrix();
     translate(positions[0].x, positions[0].y);
     rotate(angleHead);
-    fill(adjustedFillColor);
+    fill(baseColor, adjustedFillColor);
     arc(0, headSize, headSize*2, headSize*2.5, PI, 2*PI);
     popMatrix();
 
@@ -171,12 +177,12 @@ class Particle {
   }
 
   void segment(float x, float y, float angler) {
-    stroke(255, adjustedFillColor);
+    stroke(baseColor, adjustedFillColor);
     strokeWeight(0.5);
     pushMatrix();
     translate(x, y);
     rotate(angler+PI/2);
-    fill(adjustedFillColor);
+    fill(baseColor, adjustedFillColor);
     beginShape();
     vertex(0-offset, 0);
     vertex(0+offset, 0);
@@ -185,7 +191,7 @@ class Particle {
     vertex(0-offset, 0+offset);
     endShape(CLOSE);
     noStroke();
-    fill(255, adjustedFillColor);
+    fill(baseColor, adjustedFillColor);
     ellipse(0, offset, offset/3, offset/3);
     popMatrix();
   }
