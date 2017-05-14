@@ -328,7 +328,7 @@ class Environment {
 
   /// Adds firefly with specific period.
   Firefly addRandomFirefly(float period) {
-    return addFirefly(new Firefly(period, flashAdjust, heartBeatAdjustFactor, new PVector(random(BORDER +20, width- BORDER - 20), random(BORDER + 20, height - BORDER - 20))));
+    return addFirefly(new Firefly(period, flashAdjust, heartBeatAdjustFactor, new PVector(random(BORDER+100, width-BORDER-100), random(BORDER+100, height-BORDER-100))));
   }
 
   /// Adds firefly.
@@ -356,6 +356,15 @@ class Environment {
   /// Removes firefly.
   Firefly removeFirefly(Firefly f) {
     return (nextFireflies.remove(f) ? f : null);
+  }
+
+  // Removes specific firefly.
+  Firefly removeFirefly(float index) {
+    return removeFirefly(int(index));
+  }
+  
+  Firefly removeFirefly(int index) {
+    return removeFirefly(nextFireflies.get(index));
   }
 
   /// Returns the average of all last actions of agents (after a call to step()).

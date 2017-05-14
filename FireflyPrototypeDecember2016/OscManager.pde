@@ -57,10 +57,12 @@ class OscManager {
     oscP5.plug(env, "syncWithHeart",    "/environment/firefly/sync-with-heart", "i");
     oscP5.plug(env, "unsyncWithHeart",  "/environment/firefly/unsync-with-heart", "");
 
-    oscP5.plug(env, "addFirefly",         "/environment/firefly/add", "");
-    oscP5.plug(env, "addSpecialFirefly",  "/environment/firefly/add-special", "");
-    oscP5.plug(env, "addRandomFireFly",   "/environment/firefly/add-random", "f");
-    oscP5.plug(env, "removeFirefly",      "/environment/firefly/remove", "");
+    oscP5.plug(env, "addFirefly",          "/environment/firefly/add", "");
+    oscP5.plug(env, "addSpecialFirefly",   "/environment/firefly/add-special", "");
+    oscP5.plug(env, "addRandomFireFly",    "/environment/firefly/add-random", "f");
+    oscP5.plug(env, "removeRandomFirefly", "/environment/firefly/remove-random", "");
+    oscP5.plug(env, "removeFirefly",       "/environment/firefly/remove", "i");
+    oscP5.plug(env, "removeFirefly",       "/environment/firefly/remove", "f");
 
     oscP5.plug(env, "registerBeat",  "/environment/heart/beat", "");
   }
