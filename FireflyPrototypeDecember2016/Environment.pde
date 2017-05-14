@@ -317,7 +317,7 @@ class Environment {
 
   /// Adds firefly with specific period.
   Firefly addRandomFirefly(float period) {
-    return addFirefly(new Firefly(period, flashAdjust, heartBeatAdjustFactor, new PVector(random(width), random(height))));
+    return addFirefly(new Firefly(period, flashAdjust, heartBeatAdjustFactor, new PVector(random(BORDER +20, width- BORDER - 20), random(BORDER + 20, height - BORDER - 20))));
   }
 
   /// Adds firefly.

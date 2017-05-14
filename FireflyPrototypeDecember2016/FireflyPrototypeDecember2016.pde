@@ -17,6 +17,8 @@ final int OSC_RECV_PORT = 14000;
 final String OSC_IP     = "127.0.0.1";
 //final String OSC_IP     = "192.168.1.100";
 
+final int BORDER = 100;
+
 Environment env;
 
 OscManager oscManager;

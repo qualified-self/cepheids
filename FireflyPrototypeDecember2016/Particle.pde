@@ -277,29 +277,29 @@ class Particle {
     PVector circleOffSet = new PVector(wanderR*cos(wandertheta+h), wanderR*sin(wandertheta+h));
     PVector target = PVector.add(circlepos, circleOffSet);
     
-    if(location.x > width - 25)
+    if(location.x > width - BORDER)
      {
-       location.x = width - 25;
-       target.x *= -1;
+       location.x = width - BORDER;
+       velocity.x = -abs(velocity.x);
      }
      
-    if(location.x < 25)
+    if(location.x < BORDER)
      {
-       location.x = 25;
-       velocity.x *= -0.98;
+       location.x = BORDER;
+       velocity.x = abs(velocity.x);
      }
     
     
-    if(location.y > height - 25)
+    if(location.y > height - BORDER)
      {
-       location.y = height - 25;
-       target.y *= -1;
+       location.y = height - BORDER;
+       velocity.y = -abs(velocity.y);
      }
      
-    if(location.y < 25)
+    if(location.y < BORDER)
      {
-       location.y = 25;
-       velocity.y *= -0.98;
+       location.y = BORDER;
+       velocity.y = abs(velocity.y);
      }
       
       
