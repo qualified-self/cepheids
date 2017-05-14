@@ -360,6 +360,8 @@ class Environment {
 
   /// Returns the average of all last actions of agents (after a call to step()).
   float getActionAverage() {
+    if (fireflies.size() == 0)
+      return 0;
     float sum = 0;
     for (Firefly agent : fireflies) {
       sum += agent.getAction();
